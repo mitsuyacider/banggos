@@ -25,6 +25,7 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import SoundButton from "./components/SoundButton";
 
 const App: () => React$Node = () => {
   return (
@@ -55,10 +56,22 @@ const App: () => React$Node = () => {
         />
       </View>
 
-      <View style={{flex: 1, flexDirection: 'column'}}>
-        <View style={{width: 50, height: 50, backgroundColor: 'powderblue'}} />
-        <View style={{width: 50, height: 50, backgroundColor: 'skyblue'}} />
-        <View style={{width: 50, height: 50, backgroundColor: 'steelblue'}} />
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          position: 'absolute',
+          textAlign: 'right',
+          right: 0,
+          justifyContent: 'center',
+          height: '100%',
+
+          backgroundColor: 'red',
+        }}>
+        <SoundButton title='BELL'></SoundButton>
+        <SoundButton title='CLAP'></SoundButton>
+        <SoundButton title="CYMBAL"></SoundButton>
+        <SoundButton title="VOICE"></SoundButton>
       </View>
     </>
   );
