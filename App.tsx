@@ -11,12 +11,16 @@ import {
   StyleSheet,
   View,
   Image,
+  TouchableWithoutFeedback
 } from 'react-native';
 
 import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 import ButtonContainer from "./components/ButtonContainer";
+import SoundPlayer from 'react-native-sound-player';
+
+let buttonState = 'BELL';
 
 const App: () => React$Node = () => {
   return (
@@ -34,24 +38,49 @@ const App: () => React$Node = () => {
         }}
       />
       <View style={styles.scrollView}>
-        <Image
-          source={require('./assets/images/tinko.png')}
-          style={{
-            width: '100%',
-            height: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 2,
-            resizeMode: 'contain',
-          }}
-        />
+        <TouchableWithoutFeedback
+          onPress={onPressButton}
+        >
+          <Image
+            source={require('./assets/images/tinko.png')}
+            style={{
+              width: '100%',
+              height: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              zIndex: 2,
+              resizeMode: 'contain',
+            }}
+          />
+        </TouchableWithoutFeedback>
+
       </View>
 
-      <ButtonContainer></ButtonContainer>
-
+      <ButtonContainer callbackButton={callbackButton}></ButtonContainer>
     </>
   );
 };
+
+const callbackButton = (name) => {
+  buttonState = name;
+}
+
+const onPressButton = () => {
+  // NOTE: Make sound along with selected button
+  try {
+    // play the file tone.mp3
+    const files = {
+      'BELL': 'Ching',
+      'CLAP': 'Clap',
+      'CYMBAL': 'Cymbal',
+      'VOICE': 'Vox'
+    }
+    const file = files[buttonState]
+    SoundPlayer.playSoundFile(file, 'wav')
+  } catch (e) {
+    console.log(`cannot play the sound file`, e)
+  }
+}
 
 const styles = StyleSheet.create({
   scrollView: {

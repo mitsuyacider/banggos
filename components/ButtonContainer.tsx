@@ -6,8 +6,10 @@ export default class ButtonContainer extends React.Component {
   constructor(props) {
     super();
 
+    this.props = props;
+
     this.state = {
-      selectedName: ''
+      selectedName: 'BELL'
     };
   }
 
@@ -27,26 +29,9 @@ export default class ButtonContainer extends React.Component {
 
   callbackHandler(name) {
     this.setState({ selectedName: name });
+    this.props.callbackButton(name);
   }
 }
-
-// const ButtonContainer = (props) => {
-//   const [selectedName, setSelectedName] = useReducer('');
-
-// return (
-//   <>
-//     <View
-//       style={styles.container}>
-//       <SoundButton title='BELL' selectedName={selectedName} callbackHandler={callbackHandler}></SoundButton>
-//       <SoundButton title='CLAP' callbackHandler={callbackHandler}></SoundButton>
-//       <SoundButton title="CYMBAL" callbackHandler={callbackHandler}></SoundButton>
-//       <SoundButton title="VOICE" callbackHandler={callbackHandler}></SoundButton>
-//     </View>
-//   </>
-// );
-// };
-
-
 
 const styles = StyleSheet.create({
   container: {

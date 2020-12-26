@@ -17,6 +17,10 @@
 		2DCD954D1E0B4F2C00145EB5 /* appTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* appTests.m */; };
 		56420042E968C4B6E5532A6A /* libPods-app.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F3F0D350309544A4101B28E /* libPods-app.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		CED51B6225979D1A00CF6C9F /* Clap.wav in Resources */ = {isa = PBXBuildFile; fileRef = CED51B5E25979D1900CF6C9F /* Clap.wav */; };
+		CED51B6325979D1A00CF6C9F /* Cymbal.wav in Resources */ = {isa = PBXBuildFile; fileRef = CED51B5F25979D1900CF6C9F /* Cymbal.wav */; };
+		CED51B6425979D1A00CF6C9F /* Vox.wav in Resources */ = {isa = PBXBuildFile; fileRef = CED51B6025979D1900CF6C9F /* Vox.wav */; };
+		CED51B6525979D1A00CF6C9F /* Ching.wav in Resources */ = {isa = PBXBuildFile; fileRef = CED51B6125979D1900CF6C9F /* Ching.wav */; };
 		E14667D715A0913EFD36D746 /* libPods-app-appTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0167C5345E1DD37D62B283C /* libPods-app-appTests.a */; };
 		EC17503E680501F6DA6C98ED /* libPods-app-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F3C736957C4A94BD5E05AC97 /* libPods-app-tvOS.a */; };
 		FC5FBEF659BB74A1F6D60D5E /* libPods-app-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FC7BBFAA1FC37D84883C9F8 /* libPods-app-tvOSTests.a */; };
@@ -61,6 +65,10 @@
 		9F3F0D350309544A4101B28E /* libPods-app.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-app.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5F51D29D7A032D103424367 /* Pods-app-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-app-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-app-tvOS/Pods-app-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		AB53D9F17CE919B962B4F6B1 /* Pods-app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-app.debug.xcconfig"; path = "Target Support Files/Pods-app/Pods-app.debug.xcconfig"; sourceTree = "<group>"; };
+		CED51B5E25979D1900CF6C9F /* Clap.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = Clap.wav; path = ../assets/sounds/Clap.wav; sourceTree = "<group>"; };
+		CED51B5F25979D1900CF6C9F /* Cymbal.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = Cymbal.wav; path = ../assets/sounds/Cymbal.wav; sourceTree = "<group>"; };
+		CED51B6025979D1900CF6C9F /* Vox.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = Vox.wav; path = ../assets/sounds/Vox.wav; sourceTree = "<group>"; };
+		CED51B6125979D1900CF6C9F /* Ching.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = Ching.wav; path = ../assets/sounds/Ching.wav; sourceTree = "<group>"; };
 		D239E1CC6E65BEF75C6EBD97 /* Pods-app-appTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-app-appTests.debug.xcconfig"; path = "Target Support Files/Pods-app-appTests/Pods-app-appTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E0167C5345E1DD37D62B283C /* libPods-app-appTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-app-appTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E24E0DFE1B1F358BA95E8840 /* Pods-app-appTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-app-appTests.release.xcconfig"; path = "Target Support Files/Pods-app-appTests/Pods-app-appTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -125,6 +133,10 @@
 		13B07FAE1A68108700A75B9A /* app */ = {
 			isa = PBXGroup;
 			children = (
+				CED51B6125979D1900CF6C9F /* Ching.wav */,
+				CED51B5E25979D1900CF6C9F /* Clap.wav */,
+				CED51B5F25979D1900CF6C9F /* Cymbal.wav */,
+				CED51B6025979D1900CF6C9F /* Vox.wav */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -194,7 +206,6 @@
 				499FF35913C5AC11069E63E1 /* Pods-app-tvOSTests.debug.xcconfig */,
 				7F22169BC6FFD30FBB7E0E83 /* Pods-app-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -341,6 +352,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				CED51B6225979D1A00CF6C9F /* Clap.wav in Resources */,
+				CED51B6325979D1A00CF6C9F /* Cymbal.wav in Resources */,
+				CED51B6425979D1A00CF6C9F /* Vox.wav in Resources */,
+				CED51B6525979D1A00CF6C9F /* Ching.wav in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

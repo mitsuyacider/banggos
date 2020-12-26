@@ -28,13 +28,7 @@ export default class SoundButton extends React.Component {
           <Animated.View>
             <Image
               source={filePath}
-              style={{
-                width: 35,
-                height: '100%',
-                marginLeft: 15,
-                resizeMode: 'contain',
-                opacity: isSelected ? 1 : 0
-              }}
+              style={{ ...styles.image, opacity: isSelected ? 1 : 0 }}
             />
             <Text
               style={styles.text}>
@@ -69,5 +63,11 @@ const styles = StyleSheet.create({
 
     width: 100,
     transform: [{ rotateZ: '-90deg' }],
+  },
+  image: {
+    width: 35,
+    height: '100%',
+    marginLeft: 15,
+    resizeMode: 'contain',
   }
 });
