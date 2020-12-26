@@ -11,16 +11,18 @@ import {
   StyleSheet,
   View,
   Image,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
-import ButtonContainer from "./components/ButtonContainer";
 import SoundPlayer from 'react-native-sound-player';
 
+import ButtonContainer from "./components/ButtonContainer";
+
 let buttonState = 'BELL';
+let showModal = false;
 
 const App: () => React$Node = () => {
   return (

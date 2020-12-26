@@ -36,6 +36,7 @@ export default class SoundButton extends React.Component {
             </Text>
           </Animated.View>
         </TouchableHighlight>
+        {this.props.children}
       </>
     );
   }
@@ -47,7 +48,6 @@ export default class SoundButton extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    width: 30,
     height: 70,
     backgroundColor: 'white',
     marginTop: 20,
