@@ -8,24 +8,15 @@
 
 import React from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
-  Text,
-  StatusBar,
   Image,
-  ImageBackground,
 } from 'react-native';
 
 import {
-  Header,
-  LearnMoreLinks,
   Colors,
-  DebugInstructions,
-  ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import SoundButton from "./components/SoundButton";
+import ButtonContainer from "./components/ButtonContainer";
 
 const App: () => React$Node = () => {
   return (
@@ -56,23 +47,8 @@ const App: () => React$Node = () => {
         />
       </View>
 
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          position: 'absolute',
-          textAlign: 'right',
-          right: 0,
-          justifyContent: 'center',
-          height: '100%',
+      <ButtonContainer></ButtonContainer>
 
-          backgroundColor: 'red',
-        }}>
-        <SoundButton title='BELL'></SoundButton>
-        <SoundButton title='CLAP'></SoundButton>
-        <SoundButton title="CYMBAL"></SoundButton>
-        <SoundButton title="VOICE"></SoundButton>
-      </View>
     </>
   );
 };
