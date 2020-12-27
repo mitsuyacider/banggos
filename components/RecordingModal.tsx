@@ -31,10 +31,10 @@ export default class RecordingModal extends React.Component {
       recordTime: '00:00',
       currentPositionSec: 0,
       currentDurationSec: 0,
-      playTime: '00:00:00',
-      duration: '00:00:00',
+      playTime: '00:00',
+      duration: '00:00',
       isPlaying: false,
-      isRecording: true,
+      isRecording: false,
     }
 
     this.audioRecorderPlayer = new AudioRecorderPlayer();
@@ -57,6 +57,7 @@ export default class RecordingModal extends React.Component {
       (screenWidth - 56 * ratio);
     if (!playWidth) playWidth = 0;
 
+    const isStandby = !this.state.isRecording && !this.state.isPlaying
     const showPlayView = !this.state.isRecording;
     const showPlayBtn = showPlayView && !this.state.isPlaying;
     const digitWidth = 60;
@@ -75,11 +76,12 @@ export default class RecordingModal extends React.Component {
                 width: '100%',
                 backgroundColor: 'red',
                 marginTop: 140,
-                display: 'flex',
+                // display: 'flex',
                 justifyContent: 'center',
                 flexDirection: 'column',
                 alignItems: 'center',
-                position: 'relative'
+                position: 'relative',
+                display: showPlayView ? 'none' : 'flex'
               }}>
                 <View style={{
                   display: 'flex',
@@ -128,20 +130,32 @@ export default class RecordingModal extends React.Component {
                   </Text>
 
                 </View>
-                <Text style={{
+                {/* <Text style={{
                   fontSize: 20,
                 }}>
                   ...Recording
-                </Text>
+                </Text> */}
               </View>
 
               {/* Play time container */}
-              <View style={{ ...styles.container, display: showPlayView ? 'flex' : 'none' }}>
-
+              <View style={{
+                ...styles.container,
+                display: showPlayView ? 'flex' : 'none',
+                marginTop: 120
+              }}>
                 {/* Play / Stop button */}
-                <View style={{ justifyContent: 'center', width: '100%' }}>
+                <View style={{
+                  justifyContent: 'center', width: '100%'
+                }}>
                   <Button
-                    style={{ ...styles.btn, display: showPlayBtn ? 'flex' : 'none' }}
+                    style={{
+                      ...styles.btn,
+                      display: showPlayBtn ? 'flex' : 'none',
+                      marginLeft: 'auto', marginRight: 'auto',
+                      width: 180,
+                      height: 180,
+                      borderRadius: 90
+                    }}
                     onPress={this.onStartPlay}
                     textStyle={styles.txt}
                   >
@@ -161,7 +175,13 @@ export default class RecordingModal extends React.Component {
                   </Button> */}
                   <Button
                     style={
-                      { ...styles.btn, display: showPlayBtn ? 'none' : 'flex' }
+                      {
+                        ...styles.btn, display: showPlayBtn ? 'none' : 'flex',
+                        marginLeft: 'auto', marginRight: 'auto',
+                        width: 180,
+                        height: 180,
+                        borderRadius: 90
+                      }
                     }
                     onPress={this.onStopPlay}
                     textStyle={styles.txt}
@@ -171,8 +191,13 @@ export default class RecordingModal extends React.Component {
                 </View>
 
                 {/* NOTE: Play time */}
-                <View>
-                  <Text>
+                <View style={{
+                  marginTop: 50
+                }}>
+                  <Text style={{
+                    fontSize: 30,
+                    textAlign: 'center'
+                  }}>
                     {this.state.playTime} / {this.state.duration}
                   </Text>
                 </View>
@@ -389,8 +414,8 @@ export default class RecordingModal extends React.Component {
         currentDurationSec: e.duration,
         playTime: this.audioRecorderPlayer.mmssss(
           Math.floor(e.current_position),
-        ),
-        duration: this.audioRecorderPlayer.mmssss(Math.floor(e.duration)),
+        ).slice(3),
+        duration: this.audioRecorderPlayer.mmssss(Math.floor(e.duration)).slice(3),
       });
     });
   };
@@ -415,12 +440,9 @@ export default class RecordingModal extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
-    height: '100%',
-    backgroundColor: 'yellow',
-    width: '100%'
+    width: '100%',
+    backgroundColor: 'blue'
   },
   centeredView: {
     flex: 1,
@@ -466,16 +488,19 @@ const styles = StyleSheet.create({
     marginTop: 28 * ratio,
     marginHorizontal: 28 * ratio,
     alignSelf: 'stretch',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   viewBar: {
-    backgroundColor: '#ccc',
-    height: 5,
+    // backgroundColor: '#ccc',
+    borderColor: '#ccc',
+    borderWidth: 2,
+    height: 15,
     alignSelf: 'stretch',
+    borderRadius: 8
   },
   viewBarPlay: {
     backgroundColor: 'white',
-    height: 5,
+    height: 10,
     width: 0,
   },
   playStatusTxt: {
