@@ -11,7 +11,7 @@ export default class ButtonContainer extends React.Component {
 
     this.state = {
       selectedName: 'VOICE',
-      showModal: false
+      showModal: true
     };
   }
 
@@ -42,7 +42,6 @@ export default class ButtonContainer extends React.Component {
                     borderBottomLeftRadius: 5,
                     borderTopLeftRadius: 5,
                     marginLeft: 'auto',
-                    // position: 'absolute',
                     opacity: isVoice ? 1 : 0,
                     top: 0
                   }

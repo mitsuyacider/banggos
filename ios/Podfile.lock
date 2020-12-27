@@ -296,6 +296,8 @@ PODS:
     - React-Core (= 0.63.4)
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
+  - RNAudioRecorderPlayer (2.6.0):
+    - React
   - RNSoundPlayer (0.10.5):
     - React
   - Yoga (1.14.0)
@@ -349,6 +351,7 @@ DEPENDENCIES:
   - React-RCTText (from `../node_modules/react-native/Libraries/Text`)
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RNAudioRecorderPlayer (from `../node_modules/react-native-audio-recorder-player`)
   - RNSoundPlayer (from `../node_modules/react-native-sound-player`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -418,6 +421,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNAudioRecorderPlayer:
+    :path: "../node_modules/react-native-audio-recorder-player"
   RNSoundPlayer:
     :path: "../node_modules/react-native-sound-player"
   Yoga:
@@ -460,6 +465,7 @@ SPEC CHECKSUMS:
   React-RCTText: 5c51df3f08cb9dedc6e790161195d12bac06101c
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
+  RNAudioRecorderPlayer: 9964c7c66ab7d8d2f3a1cc821bd0a5dc0eeb3908
   RNSoundPlayer: fd4dbbff120c76f22718c4d831a13c40fc5e9efd
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a

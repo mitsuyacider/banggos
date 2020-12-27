@@ -10,6 +10,8 @@ target 'app' do
 
   pod 'RNSoundPlayer', :path => '../node_modules/react-native-sound-player'
 
+  pod 'RNAudioRecorderPlayer', :path => '../node_modules/react-native-audio-recorder-player'
+
   target 'appTests' do
     inherit! :complete
     # Pods for testing
