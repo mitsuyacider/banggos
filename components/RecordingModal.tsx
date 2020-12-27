@@ -59,6 +59,8 @@ export default class RecordingModal extends React.Component {
 
     const showPlayView = !this.state.isRecording;
     const showPlayBtn = showPlayView && !this.state.isPlaying;
+    const digitWidth = 60;
+
     return (
       <>
         < Modal
@@ -71,7 +73,6 @@ export default class RecordingModal extends React.Component {
               {/* Recording view */}
               <View style={{
                 width: '100%',
-                // height: 100,
                 backgroundColor: 'red',
                 marginTop: 140,
                 display: 'flex',
@@ -80,11 +81,53 @@ export default class RecordingModal extends React.Component {
                 alignItems: 'center',
                 position: 'relative'
               }}>
-                <Text style={{
-                  fontSize: 80,
+                <View style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  width: '100%',
+                  justifyContent: 'center'
                 }}>
-                  {this.state.recordTime}
-                </Text>
+                  <Text style={{
+                    fontSize: 80,
+                    width: digitWidth,
+                    backgroundColor: 'blue',
+                  }}>
+                    {this.state.recordTime.substr(0, 1)}
+                  </Text>
+
+                  <Text style={{
+                    width: digitWidth,
+                    fontSize: 80,
+                    backgroundColor: 'blue',
+                  }}>
+                    {this.state.recordTime.substr(1, 1)}
+                  </Text>
+
+                  <Text style={{
+                    width: 25,
+                    fontSize: 80,
+                    backgroundColor: 'blue',
+                  }}>
+                    :
+                  </Text>
+
+                  <Text style={{
+                    width: digitWidth,
+                    fontSize: 80,
+                    backgroundColor: 'blue',
+                  }}>
+                    {this.state.recordTime.substr(3, 1)}
+                  </Text>
+
+                  <Text style={{
+                    width: 80,
+                    fontSize: 80,
+                    backgroundColor: 'blue',
+                  }}>
+                    {this.state.recordTime.substr(4, 1)}
+                  </Text>
+
+                </View>
                 <Text style={{
                   fontSize: 20,
                 }}>
