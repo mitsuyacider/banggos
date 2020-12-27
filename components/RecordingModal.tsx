@@ -27,13 +27,14 @@ export default class RecordingModal extends React.Component {
     this.props = props;
     this.state = {
       visible: this.props.showModal,
-      isLoggingIn: false,
       recordSecs: 0,
-      recordTime: '00:00:00',
+      recordTime: '00:00',
       currentPositionSec: 0,
       currentDurationSec: 0,
       playTime: '00:00:00',
       duration: '00:00:00',
+      isPlaying: false,
+      isRecording: true,
     }
 
     this.audioRecorderPlayer = new AudioRecorderPlayer();
@@ -55,6 +56,9 @@ export default class RecordingModal extends React.Component {
       (this.state.currentPositionSec / this.state.currentDurationSec) *
       (screenWidth - 56 * ratio);
     if (!playWidth) playWidth = 0;
+
+    const showPlayView = !this.state.isRecording;
+    const showPlayBtn = showPlayView && !this.state.isPlaying;
     return (
       <>
         < Modal
@@ -63,114 +67,177 @@ export default class RecordingModal extends React.Component {
           visible={visible} >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalText}>Hello World!</Text>
 
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-                onPress={() => {
-                  this.setModalVisible(!visible)
-                }}
-              >
-                <Text style={styles.textStyle}>Hide Modal</Text>
-              </TouchableHighlight>
+              {/* Recording view */}
+              <View style={{
+                width: '100%',
+                // height: 100,
+                backgroundColor: 'red',
+                marginTop: 140,
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                alignItems: 'center',
+                position: 'relative'
+              }}>
+                <Text style={{
+                  fontSize: 80,
+                }}>
+                  {this.state.recordTime}
+                </Text>
+                <Text style={{
+                  fontSize: 20,
+                }}>
+                  ...Recording
+                </Text>
+              </View>
 
-              <View style={styles.container}>
-                <Text style={styles.titleTxt}>{'TITLE'}</Text>
-                <Text style={styles.txtRecordCounter}>{this.state.recordTime}</Text>
-                <View>
-                  <View>
-                    <Button
-                      style={styles.btn}
-                      onPress={this.onStartRecord}
-                      textStyle={styles.txt}
-                    >
-                      {'RECORD'}
-                    </Button>
-                    <Button
-                      style={[
-                        styles.btn,
-                        {
-                          marginLeft: 12 * ratio,
-                        },
-                      ]}
-                      onPress={this.onStopRecord}
-                      textStyle={styles.txt}
-                    >
-                      {'STOP'}
-                    </Button>
-                  </View>
-                </View>
-                <View>
-                  <TouchableOpacity
-                    onPress={this.onStatusPress}
+              {/* Play time container */}
+              <View style={{ ...styles.container, display: showPlayView ? 'flex' : 'none' }}>
+
+                {/* Play / Stop button */}
+                <View style={{ justifyContent: 'center', width: '100%' }}>
+                  <Button
+                    style={{ ...styles.btn, display: showPlayBtn ? 'flex' : 'none' }}
+                    onPress={this.onStartPlay}
+                    textStyle={styles.txt}
                   >
-                  </TouchableOpacity>
+                    {'PLAY'}
+                  </Button>
+                  {/* <Button
+                    style={[
+                      styles.btn,
+                      {
+                        marginLeft: 12 * ratio,
+                      },
+                    ]}
+                    onPress={this.onPausePlay}
+                    textStyle={styles.txt}
+                  >
+                    {'PAUSE'}
+                  </Button> */}
+                  <Button
+                    style={
+                      { ...styles.btn, display: showPlayBtn ? 'none' : 'flex' }
+                    }
+                    onPress={this.onStopPlay}
+                    textStyle={styles.txt}
+                  >
+                    {'STOP'}
+                  </Button>
+                </View>
+
+                {/* NOTE: Play time */}
+                <View>
                   <Text>
                     {this.state.playTime} / {this.state.duration}
                   </Text>
-                  <View>
-                    <Button
-                      style={styles.btn}
-                      onPress={this.onStartPlay}
-                      textStyle={styles.txt}
-                    >
-                      {'PLAY'}
-                    </Button>
-                    <Button
-                      style={[
-                        styles.btn,
-                        {
-                          marginLeft: 12 * ratio,
-                        },
-                      ]}
-                      onPress={this.onPausePlay}
-                      textStyle={styles.txt}
-                    >
-                      {'PAUSE'}
-                    </Button>
-                    <Button
-                      style={[
-                        styles.btn,
-                        {
-                          marginLeft: 12 * ratio,
-                        },
-                      ]}
-                      onPress={this.onStopPlay}
-                      textStyle={styles.txt}
-                    >
-                      {'STOP'}
-                    </Button>
+                </View>
+
+                {/* NOTE: Time bar */}
+                <View
+                  style={styles.viewBarWrapper}
+                >
+                  <View style={styles.viewBar}>
+                    <View style={[styles.viewBarPlay, { width: playWidth }]} />
                   </View>
                 </View>
+
               </View>
             </View>
+          </View>
+
+
+
+          {/* NOTE: Record / Stop button */}
+          <View style={{
+            justifyContent: 'center',
+            width: '100%',
+            height: 100,
+            position: 'absolute',
+            bottom: 50,
+            zIndex: 1,
+          }}>
+
+            <Button
+              style={
+                {
+                  ...styles.btn,
+                  display: this.state.isRecording ? 'none' : 'flex',
+                  justifyContent: 'center',
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                }
+              }
+              onPress={this.onStartRecord}
+              imgCenterSrc={require('../assets/images/bellThumbnail.png')}
+            >
+            </Button>
+            <Button
+              style={{
+                ...styles.btn,
+                display: this.state.isRecording ? 'flex' : 'none',
+                justifyContent: 'center',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+              }}
+              onPress={this.onStopRecord}
+              imgCenterSrc={require('../assets/images/voiceThumbnail.png')}
+            >
+            </Button>
+          </View>
+
+          {/* Footer */}
+          <View style={{
+            height: 100,
+            position: 'absolute',
+            bottom: 0,
+            zIndex: 0,
+            backgroundColor: 'rgba(255,0,0,0.5)',
+            width: '100%'
+          }}>
+
+            {/* Completion */}
+            <TouchableHighlight
+              style={{
+                ...styles.openButton,
+                backgroundColor: "#2196F3",
+                right: 40,
+                height: 100,
+                width: 80,
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'absolute'
+              }}
+              onPress={() => {
+                this.setModalVisible(!visible)
+              }}
+            >
+              <Text style={styles.textStyle}>Done</Text>
+            </TouchableHighlight>
+
+            <TouchableHighlight
+              style={{
+                ...styles.openButton,
+                backgroundColor: "#2196F3",
+                left: 40,
+                height: 100,
+                width: 80,
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'absolute'
+              }}
+              onPress={() => {
+                this.deleteAudio();
+              }}
+            >
+              <Text style={styles.textStyle}>Delete</Text>
+            </TouchableHighlight>
           </View>
         </Modal >
       </>
     )
   }
-
-  private onStatusPress = (e: any) => {
-    const touchX = e.nativeEvent.locationX;
-    console.log(`touchX: ${touchX}`);
-    const playWidth =
-      (this.state.currentPositionSec / this.state.currentDurationSec) *
-      (screenWidth - 56 * ratio);
-    console.log(`currentPlayWidth: ${playWidth}`);
-
-    const currentPosition = Math.round(this.state.currentPositionSec);
-    console.log(`currentPosition: ${currentPosition}`);
-
-    if (playWidth && playWidth < touchX) {
-      const addSecs = Math.round(currentPosition + 1000);
-      this.audioRecorderPlayer.seekToPlayer(addSecs);
-      console.log(`addSecs: ${addSecs}`);
-    } else {
-      const subSecs = Math.round(currentPosition - 1000);
-      this.audioRecorderPlayer.seekToPlayer(subSecs);
-      console.log(`subSecs: ${subSecs}`);
-    }
-  };
 
   private onStartRecord = async () => {
     if (Platform.OS === 'android') {
@@ -227,13 +294,15 @@ export default class RecordingModal extends React.Component {
       AVFormatIDKeyIOS: AVEncodingOption.aac,
     };
     console.log('audioSet', audioSet);
+
+    this.setState({ isRecording: true });
     const uri = await this.audioRecorderPlayer.startRecorder(path, audioSet);
     this.audioRecorderPlayer.addRecordBackListener((e: any) => {
       this.setState({
         recordSecs: e.current_position,
         recordTime: this.audioRecorderPlayer.mmssss(
           Math.floor(e.current_position),
-        ),
+        ).slice(3),
       });
     });
     console.log(`uri: ${uri}`);
@@ -244,6 +313,7 @@ export default class RecordingModal extends React.Component {
     this.audioRecorderPlayer.removeRecordBackListener();
     this.setState({
       recordSecs: 0,
+      isRecording: false
     });
     console.log(result);
   };
@@ -254,6 +324,11 @@ export default class RecordingModal extends React.Component {
       ios: 'hello.m4a',
       android: 'sdcard/hello.mp4',
     });
+
+    this.setState({
+      isPlaying: true,
+    });
+
     const msg = await this.audioRecorderPlayer.startPlayer(path);
     this.audioRecorderPlayer.setVolume(1.0);
     console.log(msg);
@@ -261,7 +336,11 @@ export default class RecordingModal extends React.Component {
       if (e.current_position === e.duration) {
         console.log('finished');
         this.audioRecorderPlayer.stopPlayer();
+        this.setState({
+          isPlaying: false,
+        });
       }
+
       this.setState({
         currentPositionSec: e.current_position,
         currentDurationSec: e.duration,
@@ -281,30 +360,36 @@ export default class RecordingModal extends React.Component {
     console.log('onStopPlay');
     this.audioRecorderPlayer.stopPlayer();
     this.audioRecorderPlayer.removePlayBackListener();
+    this.setState({
+      isPlaying: false,
+    });
   };
+
+  private deleteAudio() {
+    console.log('delete audio')
+  }
 }
 
 const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  //   flexDirection: 'column',
-  //   position: 'absolute',
-  //   textAlign: 'right',
-  //   right: 0,
-  //   justifyContent: 'center',
-  //   // height: '100%',
-  // },
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    height: '100%',
+    backgroundColor: 'yellow',
+    width: '100%'
+  },
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
     width: '100%',
+    backgroundColor: 'yellow'
     // height: '100%'
   },
   modalView: {
-    margin: 20,
-    backgroundColor: "white",
+    // margin: 20,
+    backgroundColor: "yellow",
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -316,15 +401,9 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center"
   },
-  // container: {
-  //   flex: 1,
-  //   backgroundColor: '#455A64',
-  //   flexDirection: 'column',
-  //   alignItems: 'center',
-  // },
   titleTxt: {
     marginTop: 100 * ratio,
-    color: 'white',
+    color: 'black',
     fontSize: 28 * ratio,
   },
   viewRecorder: {
@@ -344,15 +423,16 @@ const styles = StyleSheet.create({
     marginTop: 28 * ratio,
     marginHorizontal: 28 * ratio,
     alignSelf: 'stretch',
+    overflow: 'hidden'
   },
   viewBar: {
     backgroundColor: '#ccc',
-    height: 4 * ratio,
-    // alignSelf: 'stretch',
+    height: 5,
+    alignSelf: 'stretch',
   },
   viewBarPlay: {
     backgroundColor: 'white',
-    // height: 4 * ratio,
+    height: 5,
     width: 0,
   },
   playStatusTxt: {
@@ -364,10 +444,12 @@ const styles = StyleSheet.create({
     marginTop: 40 * ratio,
   },
   btn: {
-    borderColor: 'red',
     width: 100,
-    height: 80,
-    backgroundColor: 'red'
+    height: 100,
+    backgroundColor: 'red',
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center'
     // borderWidth: 1 * ratio,
   },
   txt: {
@@ -378,7 +460,7 @@ const styles = StyleSheet.create({
   },
   txtRecordCounter: {
     marginTop: 32 * ratio,
-    color: 'white',
+    color: 'black',
     fontSize: 20 * ratio,
     textAlignVertical: 'center',
     fontWeight: '200',
@@ -387,11 +469,14 @@ const styles = StyleSheet.create({
   },
   txtCounter: {
     marginTop: 12 * ratio,
-    color: 'white',
+    color: 'black',
     fontSize: 20 * ratio,
     textAlignVertical: 'center',
     fontWeight: '200',
     fontFamily: 'Helvetica Neue',
     letterSpacing: 3,
   },
+  textStyle: {
+    fontSize: 20
+  }
 });

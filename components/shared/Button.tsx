@@ -14,16 +14,16 @@ import { ratio } from '../../utils/Styles';
 
 const styles: any = StyleSheet.create({
   btn: {
-    backgroundColor: 'transparent',
-    alignSelf: 'center',
-    borderRadius: 4 * ratio,
-    borderWidth: 2 * ratio,
-    width: 320 * ratio,
-    height: 52 * ratio,
-    borderColor: 'white',
+    // backgroundColor: 'transparent',
+    // alignSelf: 'center',
+    // borderRadius: 4 * ratio,
+    // borderWidth: 2 * ratio,
+    // width: 320 * ratio,
+    // height: 52 * ratio,
+    // borderColor: 'white',
 
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
   },
   btnDisabled: {
     backgroundColor: 'rgb(243,243,243)',
@@ -42,11 +42,17 @@ const styles: any = StyleSheet.create({
     color: 'white',
   },
   imgLeft: {
-    width: 24 * ratio,
-    height: 24 * ratio,
-    position: 'absolute',
-    left: 16 * ratio,
+    // width: 24 * ratio,
+    // height: 24 * ratio,
+    // position: 'absolute',
+    // left: 16 * ratio,
   },
+  imgCenter: {
+    // width: 50 * ratio,
+    // height: 50 * ratio,
+    // position: 'absolute',
+    // left: 16 * ratio,
+  }
 });
 
 interface ItemProps {
@@ -57,7 +63,9 @@ interface ItemProps {
   disabledStyle?: any;
   textStyle?: any;
   imgLeftSrc?: any;
+  imgCenterSrc?: any;
   imgLeftStyle?: any;
+  imgCenterStyle?: any;
   indicatorColor?: string;
   activeOpacity?: number;
 }
@@ -69,6 +77,7 @@ class Button extends Component<ItemProps, any> {
     style: styles.btn,
     textStyle: styles.txt,
     imgLeftStyle: styles.imgLeft,
+    imgCenterStyle: styles.imgCenter,
     indicatorColor: 'white',
     activeOpacity: 0.5,
   };
@@ -102,7 +111,13 @@ class Button extends Component<ItemProps, any> {
           {this.props.imgLeftSrc ? (
             <Image
               style={this.props.imgLeftStyle}
-              source={this.props.imgLeftSrc}
+              source={this.props.imgCenterSrc}
+            />
+          ) : null}
+          {this.props.imgCenterSrc ? (
+            <Image
+              style={this.props.imgCenterStyle}
+              source={this.props.imgCenterSrc}
             />
           ) : null}
           <Text style={this.props.textStyle}>{this.props.children}</Text>
