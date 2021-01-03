@@ -18,11 +18,12 @@ import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 import SoundPlayer from 'react-native-sound-player';
-
 import ButtonContainer from "./components/ButtonContainer";
+import { connect } from 'react-redux';
+import { changeVoice } from './actions/changeVoice';
+import { bindActionCreators } from 'redux';
 
 let buttonState = 'BELL';
-let showModal = false;
 
 const App: () => React$Node = () => {
   return (
@@ -148,4 +149,20 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+
+
+const mapStateToProps = state => ({
+  hasVoice: state.hasVoice,
+});
+
+const ActionCreators = Object.assign(
+  {},
+  changeVoice,
+);
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(ActionCreators, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
+
+// export default App;

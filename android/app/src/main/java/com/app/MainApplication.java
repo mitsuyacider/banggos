@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.kevinresol.react_native_default_preference.RNDefaultPreferencePackage;
+import com.kevinresol.react_native_default_preference.RNDefaultPreferencePackage;
 import com.dooboolab.RNAudioRecorderPlayerPackage;
 import com.johnsonsu.rnsoundplayer.RNSoundPlayerPackage;
 import com.facebook.react.ReactInstanceManager;

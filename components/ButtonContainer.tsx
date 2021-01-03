@@ -11,7 +11,7 @@ export default class ButtonContainer extends React.Component {
 
     this.state = {
       selectedName: 'VOICE',
-      showModal: true
+      showModal: false
     };
   }
 

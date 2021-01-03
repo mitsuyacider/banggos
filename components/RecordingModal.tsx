@@ -3,7 +3,7 @@ import {
   Animated, View, Text, TouchableHighlight, StyleSheet, Image, Modal, PermissionsAndroid,
   Platform,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
@@ -13,6 +13,7 @@ import AudioRecorderPlayer, {
   AudioSourceAndroidType,
 } from 'react-native-audio-recorder-player';
 
+import DefaultPreference from 'react-native-default-preference';
 import Button from './shared/Button';
 
 const { width, height } = Dimensions.get('window');
@@ -35,10 +36,21 @@ export default class RecordingModal extends React.Component {
       duration: '00:00',
       isPlaying: false,
       isRecording: false,
+      showPlayView: false,
+      showPlayBtn: false,
+      hasRecordData: false
     }
 
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
+
+    DefaultPreference.get('hasRecordData')
+      .then(function (value) {
+        // this.setState({ hasRecordData: value })
+      })
+      .catch(err => {
+        console.log('** error', err);
+      });
 
   }
 
@@ -57,9 +69,6 @@ export default class RecordingModal extends React.Component {
       (screenWidth - 56 * ratio);
     if (!playWidth) playWidth = 0;
 
-    const isStandby = !this.state.isRecording && !this.state.isPlaying
-    const showPlayView = !this.state.isRecording;
-    const showPlayBtn = showPlayView && !this.state.isPlaying;
     const digitWidth = 60;
 
     return (
@@ -81,7 +90,7 @@ export default class RecordingModal extends React.Component {
                 flexDirection: 'column',
                 alignItems: 'center',
                 position: 'relative',
-                display: showPlayView ? 'none' : 'flex'
+                display: this.state.showPlayView ? 'none' : 'flex'
               }}>
                 <View style={{
                   display: 'flex',
@@ -140,7 +149,7 @@ export default class RecordingModal extends React.Component {
               {/* Play time container */}
               <View style={{
                 ...styles.container,
-                display: showPlayView ? 'flex' : 'none',
+                display: this.state.showPlayView ? 'flex' : 'none',
                 marginTop: 120
               }}>
                 {/* Play / Stop button */}
@@ -150,7 +159,7 @@ export default class RecordingModal extends React.Component {
                   <Button
                     style={{
                       ...styles.btn,
-                      display: showPlayBtn ? 'flex' : 'none',
+                      display: this.state.showPlayBtn ? 'flex' : 'none',
                       marginLeft: 'auto', marginRight: 'auto',
                       width: 180,
                       height: 180,
@@ -176,7 +185,7 @@ export default class RecordingModal extends React.Component {
                   <Button
                     style={
                       {
-                        ...styles.btn, display: showPlayBtn ? 'none' : 'flex',
+                        ...styles.btn, display: this.state.showPlayBtn ? 'none' : 'flex',
                         marginLeft: 'auto', marginRight: 'auto',
                         width: 180,
                         height: 180,
@@ -406,6 +415,8 @@ export default class RecordingModal extends React.Component {
         this.audioRecorderPlayer.stopPlayer();
         this.setState({
           isPlaying: false,
+          showPlayView: true,
+          showPlayBtn: true
         });
       }
 
