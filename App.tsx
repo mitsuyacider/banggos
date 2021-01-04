@@ -22,68 +22,127 @@ import ButtonContainer from "./components/ButtonContainer";
 import { connect } from 'react-redux';
 import { changeVoice } from './actions/changeVoice';
 import { bindActionCreators } from 'redux';
+import AudioRecorderPlayer, {
+  AVEncoderAudioQualityIOSType,
+  AVEncodingOption,
+  AudioEncoderAndroidType,
+  AudioSet,
+  AudioSourceAndroidType,
+} from 'react-native-audio-recorder-player';
 
 let buttonState = 'BELL';
 
-const App: () => React$Node = () => {
-  return (
-    <>
-      <Image
-        source={require('./assets/images/bg.png')}
-        style={{
-          width: '100%',
-          height: '100%',
-          top: 0,
-          zIndex: 0,
-          position: 'absolute',
-          backgroundColor: 'yellow',
-          resizeMode: 'contain',
-        }}
-      />
-      <View style={styles.scrollView}>
-        <TouchableWithoutFeedback
-          onPress={onPressButton}
-        >
-          <Image
-            source={require('./assets/images/tinko.png')}
-            style={{
-              width: '100%',
-              height: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-              zIndex: 2,
-              resizeMode: 'contain',
-            }}
-          />
-        </TouchableWithoutFeedback>
+class App extends React.Component {
+  constructor(props) {
+    super();
 
-      </View>
-
-      <ButtonContainer callbackButton={callbackButton}></ButtonContainer>
-    </>
-  );
-};
-
-const callbackButton = (name) => {
-  buttonState = name;
-}
-
-const onPressButton = () => {
-  // NOTE: Make sound along with selected button
-  try {
-    // play the file tone.mp3
-    const files = {
-      'BELL': 'Ching',
-      'CLAP': 'Clap',
-      'CYMBAL': 'Cymbal',
-      'VOICE': 'Vox'
-    }
-    const file = files[buttonState]
-    SoundPlayer.playSoundFile(file, 'wav')
-  } catch (e) {
-    console.log(`cannot play the sound file`, e)
+    this.props = props;
+    this.audioRecorderPlayer = new AudioRecorderPlayer();
   }
+
+  render() {
+    return (
+      <>
+        <Image
+          source={require('./assets/images/bg.png')}
+          style={{
+            width: '100%',
+            height: '100%',
+            top: 0,
+            zIndex: 0,
+            position: 'absolute',
+            backgroundColor: 'yellow',
+            resizeMode: 'contain',
+          }}
+        />
+        <View style={styles.scrollView}>
+          <TouchableWithoutFeedback
+            onPress={this.onPressButton.bind(this)}
+          >
+            <Image
+              source={require('./assets/images/tinko.png')}
+              style={{
+                width: '100%',
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: 2,
+                resizeMode: 'contain',
+              }}
+            />
+          </TouchableWithoutFeedback>
+
+        </View>
+
+        <ButtonContainer callbackButton={this.callbackButton.bind(this)}></ButtonContainer>
+      </>
+    )
+  }
+
+  callbackButton(name) {
+    buttonState = name;
+  }
+
+  onPressButton() {
+    // NOTE: Make sound along with selected button
+    try {
+      // play the file tone.mp3
+      const files = {
+        'BELL': 'Ching',
+        'CLAP': 'Clap',
+        'CYMBAL': 'Cymbal',
+        'VOICE': 'Vox'
+      }
+      const file = files[buttonState]
+      if (buttonState == 'VOICE') {
+        console.log('*** onstart')
+        this.onStartPlay();
+        // SoundPlayer.playSoundFile('file:///Users/mw/Library/Developer/CoreSimulator/Devices/BB206464-ADF0-413B-94F3-97BC3899EFD3/data/Containers/Data/Application/3880DDDC-677D-4423-A709-664A5CCC06ED/Library/Caches/hello', 'm4a')
+      } else {
+        SoundPlayer.playSoundFile(file, 'wav')
+      }
+    } catch (e) {
+      console.log(`cannot play the sound file`, e)
+    }
+  }
+
+  onStartPlay = async () => {
+    console.log('onStartPlay');
+    const path = Platform.select({
+      ios: 'hello.m4a',
+      android: 'sdcard/hello.mp4',
+    });
+
+    this.setState({
+      isPlaying: true,
+    });
+
+    const msg = await this.audioRecorderPlayer.startPlayer(path);
+    this.audioRecorderPlayer.setVolume(1.0);
+    console.log('**** message', msg);
+    this.audioRecorderPlayer.addPlayBackListener((e: any) => {
+      if (e.current_position === e.duration) {
+        console.log('finished');
+        this.audioRecorderPlayer.stopPlayer();
+        // this.setState({
+        //   isPlaying: false,
+        //   showPlayView: true,
+        //   showPlayBtn: true
+        // });
+      }
+
+      // this.setState({
+      //   currentPositionSec: e.current_position,
+      //   currentDurationSec: e.duration,
+      //   playTime: this.audioRecorderPlayer.mmssss(
+      //     Math.floor(e.current_position),
+      //   ).slice(3),
+      //   duration: this.audioRecorderPlayer.mmssss(Math.floor(e.duration)).slice(3),
+      // });
+    });
+  };
 }
+
 
 const styles = StyleSheet.create({
   scrollView: {
