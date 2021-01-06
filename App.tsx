@@ -12,6 +12,7 @@ import {
   View,
   Image,
   TouchableWithoutFeedback,
+  NativeEventEmitter
 } from 'react-native';
 
 import {
@@ -30,6 +31,24 @@ import AudioRecorderPlayer, {
   AudioSourceAndroidType,
 } from 'react-native-audio-recorder-player';
 
+import osc from 'react-native-osc';
+
+var portIn = 9999
+var portOut = 8888
+
+//create a client and send a message
+// osc.createClient("192.168.1.0", portOut);
+// osc.sendMessage("/address/", [1.0, 0.0]);
+
+
+// //suscribe to GotMessage event to receive OSC messages
+// const eventEmitter = new NativeEventEmitter(osc);
+// eventEmitter.addListener('GotMessage', (oscMessage) => {
+//   console.log("message: ", oscMessage);
+// });
+
+// osc.createServer('', portIn);
+
 let buttonState = 'BELL';
 
 class App extends React.Component {
@@ -38,6 +57,7 @@ class App extends React.Component {
 
     this.props = props;
     this.audioRecorderPlayer = new AudioRecorderPlayer();
+
   }
 
   render() {
@@ -84,6 +104,7 @@ class App extends React.Component {
   }
 
   onPressButton() {
+
     // NOTE: Make sound along with selected button
     try {
       // play the file tone.mp3
@@ -94,10 +115,8 @@ class App extends React.Component {
         'VOICE': 'Vox'
       }
       const file = files[buttonState]
-      if (buttonState == 'VOICE') {
-        console.log('*** onstart')
+      if (buttonState == 'VOICE' && this.props.hasVoice) {
         this.onStartPlay();
-        // SoundPlayer.playSoundFile('file:///Users/mw/Library/Developer/CoreSimulator/Devices/BB206464-ADF0-413B-94F3-97BC3899EFD3/data/Containers/Data/Application/3880DDDC-677D-4423-A709-664A5CCC06ED/Library/Caches/hello', 'm4a')
       } else {
         SoundPlayer.playSoundFile(file, 'wav')
       }
@@ -117,6 +136,7 @@ class App extends React.Component {
       isPlaying: true,
     });
 
+    this.audioRecorderPlayer.seekToPlayer(0);
     const msg = await this.audioRecorderPlayer.startPlayer(path);
     this.audioRecorderPlayer.setVolume(1.0);
     console.log('**** message', msg);
@@ -142,6 +162,25 @@ class App extends React.Component {
     });
   };
 }
+
+
+const mapStateToProps = state => {
+  return {
+    hasVoice: state.hasVoice,
+  }
+};
+
+// const ActionCreators = Object.assign(
+//   {},
+//   changeVoice,
+// );
+const mapDispatchToProps = dispatch => {
+  // actions: bindActionCreators(ActionCreators, dispatch),
+  return {
+    changeVoice: (flag) => { dispatch({ type: 'VOICE_CHANGE', payload: flag }) }
+    // actions: bindActionCreators(ActionCreators, dispatch),
+  }
+};
 
 
 const styles = StyleSheet.create({
@@ -210,17 +249,6 @@ const styles = StyleSheet.create({
 
 
 
-const mapStateToProps = state => ({
-  hasVoice: state.hasVoice,
-});
-
-const ActionCreators = Object.assign(
-  {},
-  changeVoice,
-);
-const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(ActionCreators, dispatch),
-});
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
 

@@ -4,6 +4,10 @@ const rootReducer = combineReducers(
     { hasVoice: voiceReducer }
 );
 const configureStore = () => {
-    return createStore(rootReducer);
+    return createStore(voiceReducer);
+
+    // NOTE: If use this, it returns a nested object.
+    // return createStore(rootReducer);
 }
 export default configureStore;
+// export default voiceReducer;

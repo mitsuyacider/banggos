@@ -14,6 +14,8 @@ target 'app' do
 
   pod 'RNDefaultPreference', :path => '../node_modules/react-native-default-preference'
 
+  pod 'react-native-osc', :path => '../node_modules/react-native-osc'
+
   target 'appTests' do
     inherit! :complete
     # Pods for testing
