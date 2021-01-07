@@ -12,6 +12,7 @@ import AudioRecorderPlayer, {
   AudioSet,
   AudioSourceAndroidType,
 } from 'react-native-audio-recorder-player';
+import { connect } from 'react-redux';
 
 import DefaultPreference from 'react-native-default-preference';
 import Button from './shared/Button';
@@ -21,13 +22,14 @@ let calRatio = width <= height ? 16 * (width / height) : 16 * (height / width);
 const ratio = calRatio / (360 / 9);
 export const screenWidth = width;
 
-export default class RecordingModal extends React.Component {
+class RecordingModal extends React.Component {
   constructor(props) {
     super();
 
     this.props = props;
+    console.log('**** has voice in record modal', this.props.hasVoice)
     this.state = {
-      visible: this.props.showModal,
+      visible: false,
       recordSecs: 0,
       recordTime: '00:00',
       currentPositionSec: 0,
@@ -36,34 +38,38 @@ export default class RecordingModal extends React.Component {
       duration: '00:00',
       isPlaying: false,
       isRecording: false,
-      showPlayView: false,
-      showPlayBtn: false,
-      hasRecordData: false
+      showPlayView: this.props.hasVoice,
+      showPlayBtn: this.props.hasVoice,
+      showRecordingBtn: true,
     }
 
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
+  }
 
-    DefaultPreference.get('hasRecordData')
-      .then(function (value) {
-        // this.setState({ hasRecordData: value })
-      })
-      .catch(err => {
-        console.log('** error', err);
+
+  componentDidUpdate(prevProp, prevState) {
+    const { showModal } = this.props;
+    if (!prevProp.showModal && showModal) {
+      // NOTE: Open
+      this.setState({
+        recordSecs: 0,
+        recordTime: '00:00',
+        currentPositionSec: 0,
+        currentDurationSec: 0,
+        playTime: '00:00',
+        duration: '00:00',
+        isPlaying: false,
+        isRecording: false,
+        showPlayView: this.props.hasVoice,
+        showPlayBtn: this.props.hasVoice,
+        showRecordingBtn: true,
       });
-
-  }
-
-  setModalVisible = (visible) => {
-    this.setState({ visible: visible });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({ visible: nextProps.showModal });
+    }
   }
 
   render() {
-    const { visible } = this.state;
+    console.log('*******8 reren')
     let playWidth =
       (this.state.currentPositionSec / this.state.currentDurationSec) *
       (screenWidth - 56 * ratio);
@@ -76,7 +82,7 @@ export default class RecordingModal extends React.Component {
         < Modal
           animationType="slide"
           transparent={false}
-          visible={visible} >
+          visible={this.props.showModal} >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
 
@@ -240,7 +246,7 @@ export default class RecordingModal extends React.Component {
               style={
                 {
                   ...styles.btn,
-                  display: this.state.isRecording ? 'none' : 'flex',
+                  display: this.state.isRecording || !this.state.showRecordingBtn ? 'none' : 'flex',
                   justifyContent: 'center',
                   marginLeft: 'auto',
                   marginRight: 'auto',
@@ -287,7 +293,11 @@ export default class RecordingModal extends React.Component {
                 position: 'absolute'
               }}
               onPress={() => {
-                this.setModalVisible(!visible)
+                DefaultPreference.set('hasRecordData', 'true')
+                  .then(e => {
+                    this.props.changeVoice(true);
+                    this.props.callbackButton('DONE');
+                  })
               }}
             >
               <Text style={styles.textStyle}>Done</Text>
@@ -305,7 +315,11 @@ export default class RecordingModal extends React.Component {
                 position: 'absolute'
               }}
               onPress={() => {
-                this.deleteAudio();
+                DefaultPreference.set('hasRecordData', 'false')
+                  .then(e => {
+                    this.props.changeVoice(false);
+                    this.props.callbackButton('DELETE');
+                  })
               }}
             >
               <Text style={styles.textStyle}>Delete</Text>
@@ -334,7 +348,7 @@ export default class RecordingModal extends React.Component {
           return;
         }
       } catch (err) {
-        console.warn(err);
+        // console.warn(err);
         return;
       }
     }
@@ -355,7 +369,7 @@ export default class RecordingModal extends React.Component {
           return;
         }
       } catch (err) {
-        console.warn(err);
+        // console.warn(err);
         return;
       }
     }
@@ -372,7 +386,7 @@ export default class RecordingModal extends React.Component {
     };
     console.log('audioSet', audioSet);
 
-    this.setState({ isRecording: true });
+    this.setState({ isRecording: true, showPlayView: false });
     const uri = await this.audioRecorderPlayer.startRecorder(path, audioSet);
     this.audioRecorderPlayer.addRecordBackListener((e: any) => {
       this.setState({
@@ -390,7 +404,9 @@ export default class RecordingModal extends React.Component {
     this.audioRecorderPlayer.removeRecordBackListener();
     this.setState({
       recordSecs: 0,
-      isRecording: false
+      isRecording: false,
+      showPlayView: true,
+      showPlayBtn: true
     });
     console.log(result);
   };
@@ -404,6 +420,8 @@ export default class RecordingModal extends React.Component {
 
     this.setState({
       isPlaying: true,
+      showRecordingBtn: false,
+      showPlayBtn: false
     });
 
     const msg = await this.audioRecorderPlayer.startPlayer(path);
@@ -416,7 +434,9 @@ export default class RecordingModal extends React.Component {
         this.setState({
           isPlaying: false,
           showPlayView: true,
-          showPlayBtn: true
+          showPlayBtn: true,
+          showRecordingBtn: true
+
         });
       }
 
@@ -441,6 +461,9 @@ export default class RecordingModal extends React.Component {
     this.audioRecorderPlayer.removePlayBackListener();
     this.setState({
       isPlaying: false,
+      showRecordingBtn: true,
+      showPlayBtn: true,
+
     });
   };
 
@@ -559,3 +582,23 @@ const styles = StyleSheet.create({
     fontSize: 20
   }
 });
+
+const mapStateToProps = state => {
+  return {
+    hasVoice: state.hasVoice,
+  }
+};
+
+// const ActionCreators = Object.assign(
+//   {},
+//   changeVoice,
+// );
+const mapDispatchToProps = dispatch => {
+  // actions: bindActionCreators(ActionCreators, dispatch),
+  return {
+    changeVoice: (flag) => { dispatch({ type: 'VOICE_CHANGE', payload: flag }) }
+    // actions: bindActionCreators(ActionCreators, dispatch),
+  }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(RecordingModal)
+

@@ -30,7 +30,7 @@ import AudioRecorderPlayer, {
   AudioSet,
   AudioSourceAndroidType,
 } from 'react-native-audio-recorder-player';
-
+import DefaultPreference from 'react-native-default-preference';
 import osc from 'react-native-osc';
 
 var portIn = 9999
@@ -45,6 +45,7 @@ var portOut = 8888
 // const eventEmitter = new NativeEventEmitter(osc);
 // eventEmitter.addListener('GotMessage', (oscMessage) => {
 //   console.log("message: ", oscMessage);
+//  this.onPressButton();
 // });
 
 // osc.createServer('', portIn);
@@ -58,6 +59,16 @@ class App extends React.Component {
     this.props = props;
     this.audioRecorderPlayer = new AudioRecorderPlayer();
 
+    // NOTE: Initialize
+    DefaultPreference.get('hasRecordData')
+      .then((value) => {
+        const flag = !!value;
+        console.log('userdefault >> value', value, ' / flag', flag)
+        this.props.changeVoice(flag);
+      })
+      .catch(err => {
+        console.log('** error', err);
+      });
   }
 
   render() {
@@ -100,11 +111,11 @@ class App extends React.Component {
   }
 
   callbackButton(name) {
+    this.audioRecorderPlayer.stopPlayer();
     buttonState = name;
   }
 
   onPressButton() {
-
     // NOTE: Make sound along with selected button
     try {
       // play the file tone.mp3
@@ -118,6 +129,7 @@ class App extends React.Component {
       if (buttonState == 'VOICE' && this.props.hasVoice) {
         this.onStartPlay();
       } else {
+        console.log('*************8')
         SoundPlayer.playSoundFile(file, 'wav')
       }
     } catch (e) {
@@ -137,29 +149,10 @@ class App extends React.Component {
     });
 
     this.audioRecorderPlayer.seekToPlayer(0);
+    this.audioRecorderPlayer.stopPlayer();
     const msg = await this.audioRecorderPlayer.startPlayer(path);
     this.audioRecorderPlayer.setVolume(1.0);
     console.log('**** message', msg);
-    this.audioRecorderPlayer.addPlayBackListener((e: any) => {
-      if (e.current_position === e.duration) {
-        console.log('finished');
-        this.audioRecorderPlayer.stopPlayer();
-        // this.setState({
-        //   isPlaying: false,
-        //   showPlayView: true,
-        //   showPlayBtn: true
-        // });
-      }
-
-      // this.setState({
-      //   currentPositionSec: e.current_position,
-      //   currentDurationSec: e.duration,
-      //   playTime: this.audioRecorderPlayer.mmssss(
-      //     Math.floor(e.current_position),
-      //   ).slice(3),
-      //   duration: this.audioRecorderPlayer.mmssss(Math.floor(e.duration)).slice(3),
-      // });
-    });
   };
 }
 

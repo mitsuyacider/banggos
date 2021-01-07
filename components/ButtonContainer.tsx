@@ -13,6 +13,8 @@ export default class ButtonContainer extends React.Component {
       selectedName: 'VOICE',
       showModal: false
     };
+
+    this.child = React.createRef();
   }
 
   render() {
@@ -21,7 +23,7 @@ export default class ButtonContainer extends React.Component {
 
     return (
       <>
-        <RecordingModal showModal={this.state.showModal}></RecordingModal>
+        <RecordingModal showModal={this.state.showModal} callbackButton={this.callbackModal.bind(this)} />
         <View
           style={styles.container}>
           <SoundButton title='BELL' selectedName={this.state.selectedName} callbackHandler={this.callbackHandler.bind(this)}></SoundButton>
@@ -54,10 +56,15 @@ export default class ButtonContainer extends React.Component {
     );
   }
 
+  callbackModal(state) {
+    this.setState({ showModal: false });
+  }
+
   onPressVoice() {
     // NOTE: Show recording view
-    this.setState({ showModal: true })
-    // console.log('tapped voice')
+    this.setState({ showModal: true });
+    this.forceUpdate();
+
   }
 
   callbackHandler(name) {

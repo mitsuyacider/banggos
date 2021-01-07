@@ -1,1 +1,1 @@
-export const VOICE_CHANGE = 'VOICE_CHANGE'
+export const VOICE_CHANGE = 'VOICE_CHANGE';

@@ -1,6 +1,6 @@
 import { VOICE_CHANGE } from '../constants';
 const initialState = {
-    hasVoice: false
+    hasVoice: false,
 };
 const voiceReducer = (state = initialState, action) => {
     switch (action.type) {
