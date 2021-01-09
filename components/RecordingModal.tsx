@@ -16,6 +16,8 @@ import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import DefaultPreference from 'react-native-default-preference';
 import Button from './shared/Button';
+// require the module
+var RNFS = require('react-native-fs');
 
 const { width, height } = Dimensions.get('window');
 let calRatio = width <= height ? 16 * (width / height) : 16 * (height / width);
@@ -98,12 +100,22 @@ class RecordingModal extends React.Component {
                   position: 'relative',
                   display: this.state.showPlayView ? 'none' : 'flex'
                 }}>
+                  <Text style={{
+                    fontSize: 20,
+                    color: 'white',
+                    fontWeight: 'bold',
+                    textAlign: 'center'
+
+                  }}>
+                    最大で8秒まで録音できます
+                    </Text>
                   <View style={{
                     display: 'flex',
                     flexDirection: 'row',
                     width: '100%',
                     justifyContent: 'center'
                   }}>
+
                     <Text style={{
                       fontSize: 80,
                       width: digitWidth,
@@ -311,8 +323,15 @@ class RecordingModal extends React.Component {
                 onPress={() => {
                   DefaultPreference.set('hasRecordData', 'true')
                     .then(e => {
-                      this.props.changeVoice(true);
-                      this.props.callbackButton('DONE');
+                      // this.props.changeVoice(true);
+                      // this.props.callbackButton('DONE');
+                      RNFS.copyFile(RNFS.CachesDirectoryPath + '/hello.m4a', RNFS.CachesDirectoryPath + '/voice.m4a')
+                        .then(e => {
+                          console.log('success')
+                          this.props.changeVoice(true);
+                          this.props.callbackButton('DONE');
+                        })
+
                     })
                 }}
               >

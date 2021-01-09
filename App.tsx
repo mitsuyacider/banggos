@@ -33,6 +33,7 @@ import AudioRecorderPlayer, {
 } from 'react-native-audio-recorder-player';
 import DefaultPreference from 'react-native-default-preference';
 import osc from 'react-native-osc';
+var RNFS = require('react-native-fs');
 
 var portIn = 9999
 var portOut = 8888
@@ -151,6 +152,9 @@ class App extends React.Component {
       const file = files[buttonState]
       if (buttonState == 'VOICE' && this.props.hasVoice) {
         this.onStartPlay();
+        // const path = RNFS.MainBundlePath + '/voice'
+        // console.log('******* path', path)
+        // SoundPlayer.playSoundFile(path, 'm4a')
       } else {
         SoundPlayer.playSoundFile(file, 'wav')
       }
@@ -161,7 +165,7 @@ class App extends React.Component {
 
   onStartPlay = async () => {
     const path = Platform.select({
-      ios: 'hello.m4a',
+      ios: 'voice.m4a',
       android: 'sdcard/hello.mp4',
     });
 

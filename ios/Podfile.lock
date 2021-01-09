@@ -305,6 +305,8 @@ PODS:
     - React
   - RNDefaultPreference (1.4.3):
     - React
+  - RNFS (2.16.6):
+    - React
   - RNSoundPlayer (0.10.5):
     - React
   - SwiftOSC (1.3.1)
@@ -363,6 +365,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNAudioRecorderPlayer (from `../node_modules/react-native-audio-recorder-player`)
   - RNDefaultPreference (from `../node_modules/react-native-default-preference`)
+  - RNFS (from `../node_modules/react-native-fs`)
   - RNSoundPlayer (from `../node_modules/react-native-sound-player`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -441,6 +444,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-audio-recorder-player"
   RNDefaultPreference:
     :path: "../node_modules/react-native-default-preference"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   RNSoundPlayer:
     :path: "../node_modules/react-native-sound-player"
   Yoga:
@@ -487,6 +492,7 @@ SPEC CHECKSUMS:
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
   RNAudioRecorderPlayer: 9964c7c66ab7d8d2f3a1cc821bd0a5dc0eeb3908
   RNDefaultPreference: 21816c0a6f61a2829ccc0cef034392e9b509ee5f
+  RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
   RNSoundPlayer: fd4dbbff120c76f22718c4d831a13c40fc5e9efd
   SwiftOSC: 4e22674bbd1139daf659024ab39636b8952b69f1
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
