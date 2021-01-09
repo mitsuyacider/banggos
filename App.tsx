@@ -150,11 +150,11 @@ class App extends React.Component {
         'VOICE': 'Vox'
       }
       const file = files[buttonState]
-      if (buttonState == 'VOICE' && this.props.hasVoice) {
-        this.onStartPlay();
-        // const path = RNFS.MainBundlePath + '/voice'
-        // console.log('******* path', path)
-        // SoundPlayer.playSoundFile(path, 'm4a')
+      if (buttonState == 'RECORD') {
+
+        if (this.props.hasVoice) {
+          this.onStartPlay();
+        }
       } else {
         SoundPlayer.playSoundFile(file, 'wav')
       }

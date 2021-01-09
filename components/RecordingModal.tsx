@@ -215,7 +215,8 @@ class RecordingModal extends React.Component {
                     <Button
                       style={
                         {
-                          ...styles.btn, display: this.state.showPlayBtn ? 'none' : 'flex',
+                          ...styles.btn,
+                          display: this.state.showPlayBtn ? 'none' : 'flex',
                           marginLeft: 'auto', marginRight: 'auto',
                           width: 180,
                           height: 180,
@@ -318,20 +319,32 @@ class RecordingModal extends React.Component {
                   width: 80,
                   justifyContent: 'center',
                   alignItems: 'center',
-                  position: 'absolute'
+                  position: 'absolute',
+                  display: this.state.showPlayBtn ? 'flex' : 'none',
                 }}
                 onPress={() => {
                   DefaultPreference.set('hasRecordData', 'true')
                     .then(e => {
-                      // this.props.changeVoice(true);
-                      // this.props.callbackButton('DONE');
-                      RNFS.copyFile(RNFS.CachesDirectoryPath + '/hello.m4a', RNFS.CachesDirectoryPath + '/voice.m4a')
-                        .then(e => {
-                          console.log('success')
-                          this.props.changeVoice(true);
-                          this.props.callbackButton('DONE');
+                      // NOTE: If has existing data, delete it first
+                      RNFS.exists(RNFS.CachesDirectoryPath + '/voice.m4a')
+                        .then(isExist => {
+                          if (isExist) {
+                            RNFS.unlink(RNFS.CachesDirectoryPath + '/voice.m4a')
+                              .then(e => {
+                                RNFS.copyFile(RNFS.CachesDirectoryPath + '/hello.m4a', RNFS.CachesDirectoryPath + '/voice.m4a')
+                                  .then(e => {
+                                    this.props.changeVoice(true);
+                                    this.props.callbackButton('DONE');
+                                  })
+                              })
+                          } else {
+                            RNFS.copyFile(RNFS.CachesDirectoryPath + '/hello.m4a', RNFS.CachesDirectoryPath + '/voice.m4a')
+                              .then(e => {
+                                this.props.changeVoice(true);
+                                this.props.callbackButton('DONE');
+                              })
+                          }
                         })
-
                     })
                 }}
               >
@@ -349,14 +362,11 @@ class RecordingModal extends React.Component {
                   position: 'absolute'
                 }}
                 onPress={() => {
-                  DefaultPreference.set('hasRecordData', 'false')
-                    .then(e => {
-                      this.props.changeVoice(false);
-                      this.props.callbackButton('DELETE');
-                    })
+                  this.props.changeVoice(false);
+                  this.props.callbackButton('DELETE');
                 }}
               >
-                <Text style={styles.textStyle}>Delete</Text>
+                <Text style={styles.textStyle}>Cancel</Text>
               </TouchableHighlight>
             </View>
           </LinearGradient>

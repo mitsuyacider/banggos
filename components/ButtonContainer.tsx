@@ -2,6 +2,7 @@ import React, { useReducer, useState } from 'react';
 import { View, StyleSheet, Text, TouchableHighlight, Modal, Alert } from 'react-native';
 import SoundButton from "./SoundButton";
 import RecordingModal from './RecordingModal'
+import Button from './shared/Button';
 
 export default class ButtonContainer extends React.Component {
   constructor(props) {
@@ -10,15 +11,15 @@ export default class ButtonContainer extends React.Component {
     this.props = props;
 
     this.state = {
-      selectedName: 'VOICE',
-      showModal: true
+      selectedName: 'BELL',
+      showModal: false
     };
 
     this.child = React.createRef();
   }
 
   render() {
-    const isVoice = this.state.selectedName === 'VOICE';
+    const isVoice = this.state.selectedName === 'RECORD';
     // const [modalVisible, setModalVisible] = useState(false);
 
     return (
@@ -29,28 +30,43 @@ export default class ButtonContainer extends React.Component {
           <SoundButton title='BELL' selectedName={this.state.selectedName} callbackHandler={this.callbackHandler.bind(this)}></SoundButton>
           <SoundButton title='CLAP' selectedName={this.state.selectedName} callbackHandler={this.callbackHandler.bind(this)}></SoundButton>
           <SoundButton title="CYMBAL" selectedName={this.state.selectedName} callbackHandler={this.callbackHandler.bind(this)}></SoundButton>
-          <SoundButton style={{
+          <SoundButton title="VOICE" selectedName={this.state.selectedName} callbackHandler={this.callbackHandler.bind(this)}></SoundButton>
+          <SoundButton title="RECORD" selectedName={this.state.selectedName} callbackHandler={this.callbackHandler.bind(this)}>
+            <Button
+              style={
+                {
+                  width: 70,
+                  height: 70,
+                  backgroundColor: 'black',
+                  marginLeft: 'auto',
+                  opacity: isVoice ? 1 : 0,
+                  top: 0
+                }
+              }
+              onPress={this.onPressVoice.bind(this)}
+              imgCenterSrc={require('../assets/images/plus.png')}
+            >
+            </Button>
+          </SoundButton>
+          {/* <SoundButton style={{
             position: 'relative'
           }} title="VOICE" selectedName={this.state.selectedName} callbackHandler={this.callbackHandler.bind(this)}>
-
-            <TouchableHighlight onPress={() => this.onPressVoice()}>
-              <Text
-                style={
-                  {
-                    width: 70,
-                    height: 70,
-                    backgroundColor: 'white',
-                    opacity: 1,
-                    borderBottomLeftRadius: 5,
-                    borderTopLeftRadius: 5,
-                    marginLeft: 'auto',
-                    opacity: isVoice ? 1 : 0,
-                    top: 0
-                  }
-                }>
-              </Text>
-            </TouchableHighlight>
-          </SoundButton>
+            <Button
+              style={
+                {
+                  width: 70,
+                  height: 70,
+                  backgroundColor: 'black',
+                  marginLeft: 'auto',
+                  opacity: isVoice ? 1 : 0,
+                  top: 0
+                }
+              }
+              onPress={this.onPressVoice}
+              imgCenterSrc={require('../assets/images/microphone.png')}
+            >
+            </Button>
+          </SoundButton> */}
         </View>
       </>
     );
@@ -63,8 +79,6 @@ export default class ButtonContainer extends React.Component {
   onPressVoice() {
     // NOTE: Show recording view
     this.setState({ showModal: true });
-    this.forceUpdate();
-
   }
 
   callbackHandler(name) {

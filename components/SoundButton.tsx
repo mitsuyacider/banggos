@@ -18,6 +18,7 @@ export default class SoundButton extends React.Component {
       'CYMBAL': require('../assets/images/cymbalThumbnail.png'),
       'CLAP': require('../assets/images/clapThumbnail.png'),
       'VOICE': require('../assets/images/voiceThumbnail.png'),
+      'RECORD': require('../assets/images/microphone_black.png'),
     };
     const filePath = filePaths[this.props.title];
     const backgroundColor = isSelected ? 'yellow' : 'white';
