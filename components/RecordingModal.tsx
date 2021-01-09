@@ -13,7 +13,7 @@ import AudioRecorderPlayer, {
   AudioSourceAndroidType,
 } from 'react-native-audio-recorder-player';
 import { connect } from 'react-redux';
-
+import LinearGradient from 'react-native-linear-gradient';
 import DefaultPreference from 'react-native-default-preference';
 import Button from './shared/Button';
 
@@ -83,100 +83,112 @@ class RecordingModal extends React.Component {
           animationType="slide"
           transparent={false}
           visible={this.props.showModal} >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
+          <LinearGradient colors={['#F3CF39', '#EE7141', '#E71E47', '#000000']} style={styles.centeredView}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
 
-              {/* Recording view */}
-              <View style={{
-                width: '100%',
-                backgroundColor: 'red',
-                marginTop: 140,
-                // display: 'flex',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                alignItems: 'center',
-                position: 'relative',
-                display: this.state.showPlayView ? 'none' : 'flex'
-              }}>
+                {/* Recording view */}
                 <View style={{
-                  display: 'flex',
-                  flexDirection: 'row',
                   width: '100%',
-                  justifyContent: 'center'
+                  marginTop: 140,
+                  // display: 'flex',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  position: 'relative',
+                  display: this.state.showPlayView ? 'none' : 'flex'
                 }}>
-                  <Text style={{
-                    fontSize: 80,
-                    width: digitWidth,
-                    backgroundColor: 'blue',
+                  <View style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%',
+                    justifyContent: 'center'
                   }}>
-                    {this.state.recordTime.substr(0, 1)}
+                    <Text style={{
+                      fontSize: 80,
+                      width: digitWidth,
+                      color: 'white',
+                      fontWeight: 'bold',
+                      textAlign: 'center'
+
+                    }}>
+                      {this.state.recordTime.substr(0, 1)}
+                    </Text>
+
+                    <Text style={{
+                      width: digitWidth,
+                      fontSize: 80,
+                      color: 'white',
+                      fontWeight: 'bold',
+                      textAlign: 'center'
+                    }}>
+                      {this.state.recordTime.substr(1, 1)}
+                    </Text>
+
+                    <Text style={{
+                      width: 25,
+                      fontSize: 80,
+                      color: 'white',
+                      fontWeight: 'bold',
+                      textAlign: 'center'
+                    }}>
+                      :
                   </Text>
 
-                  <Text style={{
-                    width: digitWidth,
-                    fontSize: 80,
-                    backgroundColor: 'blue',
-                  }}>
-                    {this.state.recordTime.substr(1, 1)}
-                  </Text>
+                    <Text style={{
+                      width: digitWidth,
+                      fontSize: 80,
+                      color: 'white',
+                      fontWeight: 'bold',
+                      textAlign: 'center'
 
-                  <Text style={{
-                    width: 25,
-                    fontSize: 80,
-                    backgroundColor: 'blue',
-                  }}>
-                    :
-                  </Text>
+                    }}>
+                      {this.state.recordTime.substr(3, 1)}
+                    </Text>
 
-                  <Text style={{
-                    width: digitWidth,
-                    fontSize: 80,
-                    backgroundColor: 'blue',
-                  }}>
-                    {this.state.recordTime.substr(3, 1)}
-                  </Text>
+                    <Text style={{
+                      width: 50,
+                      fontSize: 80,
+                      color: 'white',
+                      fontWeight: 'bold',
+                      textAlign: 'center'
+                    }}>
+                      {this.state.recordTime.substr(4, 1)}
+                    </Text>
 
-                  <Text style={{
-                    width: 80,
-                    fontSize: 80,
-                    backgroundColor: 'blue',
-                  }}>
-                    {this.state.recordTime.substr(4, 1)}
-                  </Text>
-
-                </View>
-                {/* <Text style={{
+                  </View>
+                  {/* <Text style={{
                   fontSize: 20,
                 }}>
                   ...Recording
                 </Text> */}
-              </View>
+                </View>
 
-              {/* Play time container */}
-              <View style={{
-                ...styles.container,
-                display: this.state.showPlayView ? 'flex' : 'none',
-                marginTop: 120
-              }}>
-                {/* Play / Stop button */}
+                {/* Play time container */}
                 <View style={{
-                  justifyContent: 'center', width: '100%'
+                  ...styles.container,
+                  display: this.state.showPlayView ? 'flex' : 'none',
+                  marginTop: 120,
                 }}>
-                  <Button
-                    style={{
-                      ...styles.btn,
-                      display: this.state.showPlayBtn ? 'flex' : 'none',
-                      marginLeft: 'auto', marginRight: 'auto',
-                      width: 180,
-                      height: 180,
-                      borderRadius: 90
-                    }}
-                    onPress={this.onStartPlay}
-                    textStyle={styles.txt}
-                  >
-                    {'PLAY'}
-                  </Button>
-                  {/* <Button
+                  {/* Play / Stop button */}
+                  <View style={{
+                    justifyContent: 'center', width: '100%'
+                  }}>
+                    <Button
+                      style={{
+                        ...styles.btn,
+                        display: this.state.showPlayBtn ? 'flex' : 'none',
+                        marginLeft: 'auto', marginRight: 'auto',
+                        width: 180,
+                        height: 180,
+                        borderRadius: 90
+                      }}
+                      onPress={this.onStartPlay}
+                      textStyle={styles.txt}
+                      imgCenterSrc={require('../assets/images/play.png')}
+                    >
+                    </Button>
+                    {/* <Button
                     style={[
                       styles.btn,
                       {
@@ -188,143 +200,148 @@ class RecordingModal extends React.Component {
                   >
                     {'PAUSE'}
                   </Button> */}
-                  <Button
-                    style={
-                      {
-                        ...styles.btn, display: this.state.showPlayBtn ? 'none' : 'flex',
-                        marginLeft: 'auto', marginRight: 'auto',
-                        width: 180,
-                        height: 180,
-                        borderRadius: 90
+                    <Button
+                      style={
+                        {
+                          ...styles.btn, display: this.state.showPlayBtn ? 'none' : 'flex',
+                          marginLeft: 'auto', marginRight: 'auto',
+                          width: 180,
+                          height: 180,
+                          borderRadius: 90
+                        }
                       }
-                    }
-                    onPress={this.onStopPlay}
-                    textStyle={styles.txt}
-                  >
-                    {'STOP'}
-                  </Button>
-                </View>
-
-                {/* NOTE: Play time */}
-                <View style={{
-                  marginTop: 50
-                }}>
-                  <Text style={{
-                    fontSize: 30,
-                    textAlign: 'center'
-                  }}>
-                    {this.state.playTime} / {this.state.duration}
-                  </Text>
-                </View>
-
-                {/* NOTE: Time bar */}
-                <View
-                  style={styles.viewBarWrapper}
-                >
-                  <View style={styles.viewBar}>
-                    <View style={[styles.viewBarPlay, { width: playWidth }]} />
+                      onPress={this.onStopPlay}
+                      textStyle={styles.txt}
+                      imgCenterSrc={require('../assets/images/stop.png')}
+                    >
+                    </Button>
                   </View>
-                </View>
 
+                  {/* NOTE: Play time */}
+                  <View style={{
+                    marginTop: 50
+                  }}>
+                    <Text style={{
+                      fontSize: 50,
+                      color: 'white',
+                      fontWeight: 'bold',
+                      textAlign: 'center'
+                    }}>
+                      {this.state.playTime} / {this.state.duration}
+                    </Text>
+                  </View>
+
+                  {/* NOTE: Time bar */}
+                  <View
+                    style={styles.viewBarWrapper}
+                  >
+                    <View style={styles.viewBar}>
+                      <View style={[styles.viewBarPlay, { width: playWidth }]} />
+                    </View>
+                  </View>
+
+                </View>
               </View>
             </View>
-          </View>
 
 
 
-          {/* NOTE: Record / Stop button */}
-          <View style={{
-            justifyContent: 'center',
-            width: '100%',
-            height: 100,
-            position: 'absolute',
-            bottom: 50,
-            zIndex: 1,
-          }}>
+            {/* NOTE: Record / Stop button */}
+            <View style={{
+              justifyContent: 'center',
+              width: 100,
+              height: 100,
+              position: 'absolute',
+              bottom: 50,
+              zIndex: 1,
+            }}>
 
-            <Button
-              style={
-                {
+              <Button
+                style={
+                  {
+                    ...styles.btn,
+                    display: this.state.isRecording || !this.state.showRecordingBtn ? 'none' : 'flex',
+                    justifyContent: 'center',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    width: 100,
+                    height: 100
+                  }
+                }
+                onPress={this.onStartRecord}
+                imgCenterSrc={require('../assets/images/microphone.png')}
+              >
+              </Button>
+              <Button
+                style={{
                   ...styles.btn,
-                  display: this.state.isRecording || !this.state.showRecordingBtn ? 'none' : 'flex',
+                  display: this.state.isRecording ? 'flex' : 'none',
                   justifyContent: 'center',
                   marginLeft: 'auto',
                   marginRight: 'auto',
-                }
-              }
-              onPress={this.onStartRecord}
-              imgCenterSrc={require('../assets/images/bellThumbnail.png')}
-            >
-            </Button>
-            <Button
-              style={{
-                ...styles.btn,
-                display: this.state.isRecording ? 'flex' : 'none',
-                justifyContent: 'center',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-              }}
-              onPress={this.onStopRecord}
-              imgCenterSrc={require('../assets/images/voiceThumbnail.png')}
-            >
-            </Button>
-          </View>
+                }}
+                onPress={this.onStopRecord}
+                imgCenterSrc={require('../assets/images/pause.png')}
+              >
+              </Button>
+            </View>
 
-          {/* Footer */}
-          <View style={{
-            height: 100,
-            position: 'absolute',
-            bottom: 0,
-            zIndex: 0,
-            backgroundColor: 'rgba(255,0,0,0.5)',
-            width: '100%'
-          }}>
+            {/* Footer */}
+            <View style={{
+              height: 100,
+              position: 'absolute',
+              bottom: 0,
+              zIndex: 0,
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              width: '100%',
+              display: this.state.isRecording || !this.state.showRecordingBtn ? 'none' : 'flex',
+            }}>
 
-            {/* Completion */}
-            <TouchableHighlight
-              style={{
-                ...styles.openButton,
-                backgroundColor: "#2196F3",
-                right: 40,
-                height: 100,
-                width: 80,
-                justifyContent: 'center',
-                alignItems: 'center',
-                position: 'absolute'
-              }}
-              onPress={() => {
-                DefaultPreference.set('hasRecordData', 'true')
-                  .then(e => {
-                    this.props.changeVoice(true);
-                    this.props.callbackButton('DONE');
-                  })
-              }}
-            >
-              <Text style={styles.textStyle}>Done</Text>
-            </TouchableHighlight>
+              {/* Completion */}
+              <TouchableHighlight
+                style={{
+                  ...styles.openButton,
+                  right: 40,
+                  height: 100,
+                  width: 80,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  position: 'absolute'
+                }}
+                onPress={() => {
+                  DefaultPreference.set('hasRecordData', 'true')
+                    .then(e => {
+                      this.props.changeVoice(true);
+                      this.props.callbackButton('DONE');
+                    })
+                }}
+              >
+                <Text style={styles.textStyle}>Done</Text>
+              </TouchableHighlight>
 
-            <TouchableHighlight
-              style={{
-                ...styles.openButton,
-                backgroundColor: "#2196F3",
-                left: 40,
-                height: 100,
-                width: 80,
-                justifyContent: 'center',
-                alignItems: 'center',
-                position: 'absolute'
-              }}
-              onPress={() => {
-                DefaultPreference.set('hasRecordData', 'false')
-                  .then(e => {
-                    this.props.changeVoice(false);
-                    this.props.callbackButton('DELETE');
-                  })
-              }}
-            >
-              <Text style={styles.textStyle}>Delete</Text>
-            </TouchableHighlight>
-          </View>
+              <TouchableHighlight
+                style={{
+                  ...styles.openButton,
+                  left: 40,
+                  height: 100,
+                  width: 80,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  position: 'absolute'
+                }}
+                onPress={() => {
+                  DefaultPreference.set('hasRecordData', 'false')
+                    .then(e => {
+                      this.props.changeVoice(false);
+                      this.props.callbackButton('DELETE');
+                    })
+                }}
+              >
+                <Text style={styles.textStyle}>Delete</Text>
+              </TouchableHighlight>
+            </View>
+          </LinearGradient>
+
         </Modal >
       </>
     )
@@ -468,19 +485,18 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     width: '100%',
-    backgroundColor: 'blue'
   },
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     width: '100%',
-    backgroundColor: 'yellow'
+    // backgroundColor: 'yellow'
     // height: '100%'
   },
   modalView: {
     // margin: 20,
-    backgroundColor: "yellow",
+    // backgroundColor: "yellow",
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -540,7 +556,7 @@ const styles = StyleSheet.create({
   btn: {
     width: 100,
     height: 100,
-    backgroundColor: 'red',
+    backgroundColor: 'white',
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center'
@@ -571,7 +587,8 @@ const styles = StyleSheet.create({
     letterSpacing: 3,
   },
   textStyle: {
-    fontSize: 20
+    fontSize: 24,
+    color: 'white'
   }
 });
 

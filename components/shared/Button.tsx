@@ -52,6 +52,7 @@ const styles: any = StyleSheet.create({
     // height: 50 * ratio,
     // position: 'absolute',
     // left: 16 * ratio,
+
   }
 });
 
@@ -116,7 +117,7 @@ class Button extends Component<ItemProps, any> {
           ) : null}
           {this.props.imgCenterSrc ? (
             <Image
-              style={this.props.imgCenterStyle}
+              style={{ ...this.props.imgCenterStyle, width: 70, height: 70 }}
               source={this.props.imgCenterSrc}
             />
           ) : null}
