@@ -27,7 +27,7 @@ class RecordingModal extends React.Component {
     super();
 
     this.props = props;
-    console.log('**** has voice in record modal', this.props.hasVoice)
+
     this.state = {
       visible: false,
       recordSecs: 0,
@@ -69,7 +69,7 @@ class RecordingModal extends React.Component {
   }
 
   render() {
-    console.log('*******8 reren')
+
     let playWidth =
       (this.state.currentPositionSec / this.state.currentDurationSec) *
       (screenWidth - 56 * ratio);
@@ -384,7 +384,7 @@ class RecordingModal extends React.Component {
       AVNumberOfChannelsKeyIOS: 2,
       AVFormatIDKeyIOS: AVEncodingOption.aac,
     };
-    console.log('audioSet', audioSet);
+
 
     this.setState({ isRecording: true, showPlayView: false });
     const uri = await this.audioRecorderPlayer.startRecorder(path, audioSet);
@@ -396,7 +396,7 @@ class RecordingModal extends React.Component {
         ).slice(3),
       });
     });
-    console.log(`uri: ${uri}`);
+
   };
 
   private onStopRecord = async () => {
@@ -408,11 +408,9 @@ class RecordingModal extends React.Component {
       showPlayView: true,
       showPlayBtn: true
     });
-    console.log(result);
   };
 
   private onStartPlay = async () => {
-    console.log('onStartPlay');
     const path = Platform.select({
       ios: 'hello.m4a',
       android: 'sdcard/hello.mp4',
@@ -426,10 +424,9 @@ class RecordingModal extends React.Component {
 
     const msg = await this.audioRecorderPlayer.startPlayer(path);
     this.audioRecorderPlayer.setVolume(1.0);
-    console.log(msg);
+
     this.audioRecorderPlayer.addPlayBackListener((e: any) => {
       if (e.current_position === e.duration) {
-        console.log('finished');
         this.audioRecorderPlayer.stopPlayer();
         this.setState({
           isPlaying: false,
@@ -456,7 +453,6 @@ class RecordingModal extends React.Component {
   };
 
   private onStopPlay = async () => {
-    console.log('onStopPlay');
     this.audioRecorderPlayer.stopPlayer();
     this.audioRecorderPlayer.removePlayBackListener();
     this.setState({
@@ -466,10 +462,6 @@ class RecordingModal extends React.Component {
 
     });
   };
-
-  private deleteAudio() {
-    console.log('delete audio')
-  }
 }
 
 const styles = StyleSheet.create({

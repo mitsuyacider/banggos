@@ -63,7 +63,6 @@ class App extends React.Component {
     DefaultPreference.get('hasRecordData')
       .then((value) => {
         const flag = !!value;
-        console.log('userdefault >> value', value, ' / flag', flag)
         this.props.changeVoice(flag);
       })
       .catch(err => {
@@ -129,7 +128,6 @@ class App extends React.Component {
       if (buttonState == 'VOICE' && this.props.hasVoice) {
         this.onStartPlay();
       } else {
-        console.log('*************8')
         SoundPlayer.playSoundFile(file, 'wav')
       }
     } catch (e) {
@@ -138,7 +136,6 @@ class App extends React.Component {
   }
 
   onStartPlay = async () => {
-    console.log('onStartPlay');
     const path = Platform.select({
       ios: 'hello.m4a',
       android: 'sdcard/hello.mp4',
@@ -152,7 +149,7 @@ class App extends React.Component {
     this.audioRecorderPlayer.stopPlayer();
     const msg = await this.audioRecorderPlayer.startPlayer(path);
     this.audioRecorderPlayer.setVolume(1.0);
-    console.log('**** message', msg);
+
   };
 }
 
