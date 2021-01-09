@@ -12,7 +12,8 @@ import {
   View,
   Image,
   TouchableWithoutFeedback,
-  NativeEventEmitter
+  NativeEventEmitter,
+  Animated, Easing,
 } from 'react-native';
 
 import {
@@ -58,6 +59,8 @@ class App extends React.Component {
 
     this.props = props;
     this.audioRecorderPlayer = new AudioRecorderPlayer();
+    this.spinValue = new Animated.Value(0);
+
 
     // NOTE: Initialize
     DefaultPreference.get('hasRecordData')
@@ -71,6 +74,11 @@ class App extends React.Component {
   }
 
   render() {
+    const spin = this.spinValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['90%', '100%']
+    })
+
     return (
       <>
         <Image
@@ -81,24 +89,26 @@ class App extends React.Component {
             top: 0,
             zIndex: 0,
             position: 'absolute',
-            backgroundColor: 'yellow',
-            resizeMode: 'contain',
+            backgroundColor: 'black',
+            borderRadius: 5,
+            resizeMode: 'cover',
           }}
         />
         <View style={styles.scrollView}>
           <TouchableWithoutFeedback
             onPress={this.onPressButton.bind(this)}
           >
-            <Image
-              source={require('./assets/images/tinko.png')}
+            <Animated.Image
               style={{
-                width: '100%',
+                width: spin,
                 height: '100%',
                 justifyContent: 'center',
                 alignItems: 'center',
                 zIndex: 2,
                 resizeMode: 'contain',
+                // transform: [{ rotate: spin }]
               }}
+              source={require('./assets/images/tinko.png')}
             />
           </TouchableWithoutFeedback>
 
@@ -109,12 +119,26 @@ class App extends React.Component {
     )
   }
 
+  spin() {
+    this.spinValue.setValue(0)
+    Animated.timing(
+      this.spinValue,
+      {
+        toValue: 1,
+        duration: 500,
+        easing: Easing.bounce
+      }
+    ).start()
+  }
+
   callbackButton(name) {
     this.audioRecorderPlayer.stopPlayer();
     buttonState = name;
   }
 
   onPressButton() {
+
+    this.spin();
     // NOTE: Make sound along with selected button
     try {
       // play the file tone.mp3
@@ -149,7 +173,6 @@ class App extends React.Component {
     this.audioRecorderPlayer.stopPlayer();
     const msg = await this.audioRecorderPlayer.startPlayer(path);
     this.audioRecorderPlayer.setVolume(1.0);
-
   };
 }
 
