@@ -12,7 +12,7 @@ export default class SoundButton extends React.Component {
 
   render() {
     const isSelected = this.props.title == this.props.selectedName
-    const width = isSelected ? 80 : 30;
+    const width = isSelected ? 90 : 30;
     const filePaths = {
       'BELL': require('../assets/images/bellThumbnail.png'),
       'CYMBAL': require('../assets/images/cymbalThumbnail.png'),
@@ -21,7 +21,7 @@ export default class SoundButton extends React.Component {
       'RECORD': require('../assets/images/microphone_black.png'),
     };
     const filePath = filePaths[this.props.title];
-    const backgroundColor = isSelected ? 'yellow' : 'white';
+    const backgroundColor = isSelected ? '#FFD228' : 'white';
 
     return (
       <>
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 5,
     borderTopLeftRadius: 5,
     marginLeft: 'auto',
+    zIndex: 2
   },
   text: {
     position: 'absolute',

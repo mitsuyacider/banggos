@@ -7,7 +7,7 @@ export default class Balloon extends React.Component {
 		this.opacityValue = new Animated.Value(0);
 		this.state = {
 			text: "Hit Me!",
-		}
+		};
 
 		this.sentences = ["Hit Me!", "I'm feeling...", "Please softer...", "Please harder..."];
 		this.index = 0;
@@ -28,7 +28,7 @@ export default class Balloon extends React.Component {
 					width: 250,
 					height: 100,
 					position: 'absolute',
-					zIndex: 3,
+					zIndex: 5,
 					top: '50%',
 					marginTop: -200,
 					left: '50%',
@@ -90,7 +90,7 @@ export default class Balloon extends React.Component {
 
 				// NOTE: Update text
 				this.index += 1;
-				if (this.index > this.sentences.length) {
+				if (this.index > this.sentences.length - 1) {
 					this.index = 0;
 				}
 
@@ -100,6 +100,6 @@ export default class Balloon extends React.Component {
 
 				this.fadeIn();
 			}, 5000);
-		})
+		});
 	}
 }

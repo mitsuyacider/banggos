@@ -12,7 +12,7 @@ export default class ButtonContainer extends React.Component {
 
     this.state = {
       selectedName: 'BELL',
-      showModal: false
+      showModal: true
     };
 
     this.child = React.createRef();
