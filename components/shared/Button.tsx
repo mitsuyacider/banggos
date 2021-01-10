@@ -47,13 +47,6 @@ const styles: any = StyleSheet.create({
     // position: 'absolute',
     // left: 16 * ratio,
   },
-  imgCenter: {
-    // width: 50 * ratio,
-    // height: 50 * ratio,
-    // position: 'absolute',
-    // left: 16 * ratio,
-
-  }
 });
 
 interface ItemProps {
@@ -108,7 +101,12 @@ class Button extends Component<ItemProps, any> {
         activeOpacity={this.props.activeOpacity}
         onPress={this.props.onPress}
       >
-        <View style={this.props.style}>
+        <View style={{
+          ...this.props.style,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
           {this.props.imgLeftSrc ? (
             <Image
               style={this.props.imgLeftStyle}
@@ -117,7 +115,7 @@ class Button extends Component<ItemProps, any> {
           ) : null}
           {this.props.imgCenterSrc ? (
             <Image
-              style={{ ...this.props.imgCenterStyle, width: 70, height: 70 }}
+              style={{ width: 70, height: 70 }}
               source={this.props.imgCenterSrc}
             />
           ) : null}

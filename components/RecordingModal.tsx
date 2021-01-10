@@ -16,6 +16,10 @@ import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import DefaultPreference from 'react-native-default-preference';
 import Button from './shared/Button';
+import TimeBar from './TimeBar';
+import PlayTime from './PlayTime';
+import RecordingTime from './RecordingTime'
+
 // require the module
 var RNFS = require('react-native-fs');
 
@@ -72,12 +76,13 @@ class RecordingModal extends React.Component {
 
   render() {
 
+    // let playWidth =
+    //   (this.state.currentPositionSec / this.state.currentDurationSec) *
+    //   (screenWidth - 56 * ratio);
     let playWidth =
-      (this.state.currentPositionSec / this.state.currentDurationSec) *
-      (screenWidth - 56 * ratio);
+      (this.state.currentPositionSec / this.state.currentDurationSec) * (screenWidth - 70);
     if (!playWidth) playWidth = 0;
 
-    const digitWidth = 60;
 
     return (
       <>
@@ -89,92 +94,7 @@ class RecordingModal extends React.Component {
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
 
-                {/* Recording view */}
-                <View style={{
-                  width: '100%',
-                  marginTop: 140,
-                  // display: 'flex',
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  position: 'relative',
-                  display: this.state.showPlayView ? 'none' : 'flex'
-                }}>
-                  <Text style={{
-                    fontSize: 20,
-                    color: 'white',
-                    fontWeight: 'bold',
-                    textAlign: 'center'
-
-                  }}>
-                    最大で8秒まで録音できます
-                    </Text>
-                  <View style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    width: '100%',
-                    justifyContent: 'center'
-                  }}>
-
-                    <Text style={{
-                      fontSize: 80,
-                      width: digitWidth,
-                      color: 'white',
-                      fontWeight: 'bold',
-                      textAlign: 'center'
-
-                    }}>
-                      {this.state.recordTime.substr(0, 1)}
-                    </Text>
-
-                    <Text style={{
-                      width: digitWidth,
-                      fontSize: 80,
-                      color: 'white',
-                      fontWeight: 'bold',
-                      textAlign: 'center'
-                    }}>
-                      {this.state.recordTime.substr(1, 1)}
-                    </Text>
-
-                    <Text style={{
-                      width: 25,
-                      fontSize: 80,
-                      color: 'white',
-                      fontWeight: 'bold',
-                      textAlign: 'center'
-                    }}>
-                      :
-                  </Text>
-
-                    <Text style={{
-                      width: digitWidth,
-                      fontSize: 80,
-                      color: 'white',
-                      fontWeight: 'bold',
-                      textAlign: 'center'
-
-                    }}>
-                      {this.state.recordTime.substr(3, 1)}
-                    </Text>
-
-                    <Text style={{
-                      width: 50,
-                      fontSize: 80,
-                      color: 'white',
-                      fontWeight: 'bold',
-                      textAlign: 'center'
-                    }}>
-                      {this.state.recordTime.substr(4, 1)}
-                    </Text>
-
-                  </View>
-                  {/* <Text style={{
-                  fontSize: 20,
-                }}>
-                  ...Recording
-                </Text> */}
-                </View>
+                <RecordingTime showPlayView={this.state.showPlayView} recordTime={this.state.recordTime}></RecordingTime>
 
                 {/* Play time container */}
                 <View style={{
@@ -193,25 +113,14 @@ class RecordingModal extends React.Component {
                         marginLeft: 'auto', marginRight: 'auto',
                         width: 180,
                         height: 180,
-                        borderRadius: 90
+                        borderRadius: 90,
                       }}
                       onPress={this.onStartPlay}
                       textStyle={styles.txt}
                       imgCenterSrc={require('../assets/images/play.png')}
                     >
                     </Button>
-                    {/* <Button
-                    style={[
-                      styles.btn,
-                      {
-                        marginLeft: 12 * ratio,
-                      },
-                    ]}
-                    onPress={this.onPausePlay}
-                    textStyle={styles.txt}
-                  >
-                    {'PAUSE'}
-                  </Button> */}
+
                     <Button
                       style={
                         {
@@ -230,29 +139,9 @@ class RecordingModal extends React.Component {
                     </Button>
                   </View>
 
-                  {/* NOTE: Play time */}
-                  <View style={{
-                    marginTop: 50
-                  }}>
-                    <Text style={{
-                      fontSize: 50,
-                      color: 'white',
-                      fontWeight: 'bold',
-                      textAlign: 'center'
-                    }}>
-                      {this.state.playTime} / {this.state.duration}
-                    </Text>
-                  </View>
-
                   {/* NOTE: Time bar */}
-                  <View
-                    style={styles.viewBarWrapper}
-                  >
-                    <View style={styles.viewBar}>
-                      <View style={[styles.viewBarPlay, { width: playWidth }]} />
-                    </View>
-                  </View>
-
+                  <TimeBar playWidth={playWidth}></TimeBar>
+                  <PlayTime playTime={this.state.playTime} duration={this.state.duration}></PlayTime>
                 </View>
               </View>
             </View>
@@ -536,51 +425,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center"
   },
-  titleTxt: {
-    marginTop: 100 * ratio,
-    color: 'black',
-    fontSize: 28 * ratio,
-  },
-  viewRecorder: {
-    marginTop: 40 * ratio,
-    width: '100%',
-    alignItems: 'center',
-  },
-  recordBtnWrapper: {
-    flexDirection: 'row',
-  },
-  viewPlayer: {
-    marginTop: 60 * ratio,
-    alignSelf: 'stretch',
-    alignItems: 'center',
-  },
-  viewBarWrapper: {
-    marginTop: 28 * ratio,
-    marginHorizontal: 28 * ratio,
-    alignSelf: 'stretch',
-    overflow: 'hidden',
-  },
-  viewBar: {
-    // backgroundColor: '#ccc',
-    borderColor: '#ccc',
-    borderWidth: 2,
-    height: 15,
-    alignSelf: 'stretch',
-    borderRadius: 8
-  },
-  viewBarPlay: {
-    backgroundColor: 'white',
-    height: 10,
-    width: 0,
-  },
-  playStatusTxt: {
-    marginTop: 8 * ratio,
-    color: '#ccc',
-  },
-  playBtnWrapper: {
-    flexDirection: 'row',
-    marginTop: 40 * ratio,
-  },
   btn: {
     width: 100,
     height: 100,
@@ -598,15 +442,6 @@ const styles = StyleSheet.create({
   },
   txtRecordCounter: {
     marginTop: 32 * ratio,
-    color: 'black',
-    fontSize: 20 * ratio,
-    textAlignVertical: 'center',
-    fontWeight: '200',
-    fontFamily: 'Helvetica Neue',
-    letterSpacing: 3,
-  },
-  txtCounter: {
-    marginTop: 12 * ratio,
     color: 'black',
     fontSize: 20 * ratio,
     textAlignVertical: 'center',
