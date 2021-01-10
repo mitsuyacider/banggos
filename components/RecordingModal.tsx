@@ -362,7 +362,6 @@ class RecordingModal extends React.Component {
                   position: 'absolute'
                 }}
                 onPress={() => {
-                  this.props.changeVoice(false);
                   this.props.callbackButton('DELETE');
                 }}
               >

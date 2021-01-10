@@ -13,6 +13,7 @@ import {
   Image,
   TouchableWithoutFeedback,
   NativeEventEmitter,
+  Text,
   Animated, Easing,
 } from 'react-native';
 
@@ -21,6 +22,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import SoundPlayer from 'react-native-sound-player';
 import ButtonContainer from "./components/ButtonContainer";
+import Balloon from './components/Balloon'
 import { connect } from 'react-redux';
 import { changeVoice } from './actions/changeVoice';
 import { bindActionCreators } from 'redux';
@@ -96,6 +98,10 @@ class App extends React.Component {
           }}
         />
         <View style={styles.scrollView}>
+
+          {/* NOTE: Balloon */}
+          <Balloon></Balloon>
+
           <TouchableWithoutFeedback
             onPress={this.onPressButton.bind(this)}
           >

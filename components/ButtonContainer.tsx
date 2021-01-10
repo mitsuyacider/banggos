@@ -48,25 +48,6 @@ export default class ButtonContainer extends React.Component {
             >
             </Button>
           </SoundButton>
-          {/* <SoundButton style={{
-            position: 'relative'
-          }} title="VOICE" selectedName={this.state.selectedName} callbackHandler={this.callbackHandler.bind(this)}>
-            <Button
-              style={
-                {
-                  width: 70,
-                  height: 70,
-                  backgroundColor: 'black',
-                  marginLeft: 'auto',
-                  opacity: isVoice ? 1 : 0,
-                  top: 0
-                }
-              }
-              onPress={this.onPressVoice}
-              imgCenterSrc={require('../assets/images/microphone.png')}
-            >
-            </Button>
-          </SoundButton> */}
         </View>
       </>
     );
