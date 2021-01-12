@@ -75,14 +75,9 @@ class RecordingModal extends React.Component {
   }
 
   render() {
-
-    // let playWidth =
-    //   (this.state.currentPositionSec / this.state.currentDurationSec) *
-    //   (screenWidth - 56 * ratio);
     let playWidth =
       (this.state.currentPositionSec / this.state.currentDurationSec) * (screenWidth - 70);
     if (!playWidth) playWidth = 0;
-
 
     return (
       <>
@@ -323,12 +318,17 @@ class RecordingModal extends React.Component {
     this.setState({ isRecording: true, showPlayView: false });
     const uri = await this.audioRecorderPlayer.startRecorder(path, audioSet);
     this.audioRecorderPlayer.addRecordBackListener((e: any) => {
+
       this.setState({
         recordSecs: e.current_position,
         recordTime: this.audioRecorderPlayer.mmssss(
           Math.floor(e.current_position),
         ).slice(3),
       });
+
+      if (e.current_position >= 8000) {
+        this.onStopRecord();
+      }
     });
 
   };
@@ -360,17 +360,6 @@ class RecordingModal extends React.Component {
     this.audioRecorderPlayer.setVolume(1.0);
 
     this.audioRecorderPlayer.addPlayBackListener((e: any) => {
-      if (e.current_position === e.duration) {
-        this.audioRecorderPlayer.stopPlayer();
-        this.setState({
-          isPlaying: false,
-          showPlayView: true,
-          showPlayBtn: true,
-          showRecordingBtn: true
-
-        });
-      }
-
       this.setState({
         currentPositionSec: e.current_position,
         currentDurationSec: e.duration,
@@ -379,23 +368,33 @@ class RecordingModal extends React.Component {
         ).slice(3),
         duration: this.audioRecorderPlayer.mmssss(Math.floor(e.duration)).slice(3),
       });
+
+      if (e.current_position === e.duration) {
+        this.stopAudioPlay();
+
+        return;
+      }
     });
   };
 
-  private onPausePlay = async () => {
-    await this.audioRecorderPlayer.pausePlayer();
+  private onStopPlay = async () => {
+    this.stopAudioPlay();
   };
 
-  private onStopPlay = async () => {
+  private stopAudioPlay = () => {
     this.audioRecorderPlayer.stopPlayer();
     this.audioRecorderPlayer.removePlayBackListener();
     this.setState({
       isPlaying: false,
-      showRecordingBtn: true,
+      showPlayView: true,
       showPlayBtn: true,
-
+      showRecordingBtn: true,
+      currentPositionSec: 0,
+      currentDurationSec: 0,
+      playTime: '00:00',
+      duration: '00:00',
     });
-  };
+  }
 }
 
 const styles = StyleSheet.create({

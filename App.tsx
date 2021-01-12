@@ -40,20 +40,6 @@ var RNFS = require('react-native-fs');
 var portIn = 9999
 var portOut = 8888
 
-//create a client and send a message
-// osc.createClient("192.168.1.0", portOut);
-// osc.sendMessage("/address/", [1.0, 0.0]);
-
-
-// //suscribe to GotMessage event to receive OSC messages
-// const eventEmitter = new NativeEventEmitter(osc);
-// eventEmitter.addListener('GotMessage', (oscMessage) => {
-//   console.log("message: ", oscMessage);
-//  this.onPressButton();
-// });
-
-// osc.createServer('', portIn);
-
 let buttonState = 'BELL';
 
 class App extends React.Component {
@@ -74,6 +60,23 @@ class App extends React.Component {
       .catch(err => {
         console.log('** error', err);
       });
+
+    //create a client and send a message
+    osc.createClient("192.168.1.0", portOut);
+    osc.sendMessage("/address/", [1.0, 0.0]);
+
+
+    //suscribe to GotMessage event to receive OSC messages
+    const eventEmitter = new NativeEventEmitter(osc);
+    eventEmitter.addListener('GotMessage', (oscMessage) => {
+      console.log('oscmessege', oscMessage);
+
+      if (oscMessage.address === '/sexy/60') {
+        this.onPressButton();
+      }
+    });
+
+    osc.createServer('', portIn);
   }
 
   render() {
