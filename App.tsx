@@ -14,18 +14,17 @@ import {
   TouchableWithoutFeedback,
   NativeEventEmitter,
   Text,
-  Animated, Easing,
+  Animated,
+  Easing,
 } from 'react-native';
 
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 import SoundPlayer from 'react-native-sound-player';
-import ButtonContainer from "./components/ButtonContainer";
-import Balloon from './components/Balloon'
-import { connect } from 'react-redux';
-import { changeVoice } from './actions/changeVoice';
-import { bindActionCreators } from 'redux';
+import ButtonContainer from './components/ButtonContainer';
+import Balloon from './components/Balloon';
+import {connect} from 'react-redux';
+import {changeVoice} from './actions/changeVoice';
+import {bindActionCreators} from 'redux';
 import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
   AVEncodingOption,
@@ -35,10 +34,10 @@ import AudioRecorderPlayer, {
 } from 'react-native-audio-recorder-player';
 import DefaultPreference from 'react-native-default-preference';
 import osc from 'react-native-osc';
-var RNFS = require('react-native-fs');
+const RNFS = require('react-native-fs');
 
-var portIn = 9999
-var portOut = 8888
+const portIn = 9999;
+const portOut = 8888;
 
 let buttonState = 'BELL';
 
@@ -50,21 +49,19 @@ class App extends React.Component {
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.spinValue = new Animated.Value(0);
 
-
     // NOTE: Initialize
     DefaultPreference.get('hasRecordData')
       .then((value) => {
         const flag = !!value;
         this.props.changeVoice(flag);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('** error', err);
       });
 
     //create a client and send a message
-    osc.createClient("192.168.1.0", portOut);
-    osc.sendMessage("/address/", [1.0, 0.0]);
-
+    osc.createClient('192.168.1.0', portOut);
+    osc.sendMessage('/address/', [1.0, 0.0]);
 
     //suscribe to GotMessage event to receive OSC messages
     const eventEmitter = new NativeEventEmitter(osc);
@@ -82,8 +79,8 @@ class App extends React.Component {
   render() {
     const spin = this.spinValue.interpolate({
       inputRange: [0, 1],
-      outputRange: ['90%', '100%']
-    })
+      outputRange: ['90%', '100%'],
+    });
 
     return (
       <>
@@ -101,13 +98,10 @@ class App extends React.Component {
           }}
         />
         <View style={styles.scrollView}>
-
           {/* NOTE: Balloon */}
           <Balloon></Balloon>
 
-          <TouchableWithoutFeedback
-            onPress={this.onPressButton.bind(this)}
-          >
+          <TouchableWithoutFeedback onPress={this.onPressButton.bind(this)}>
             <Animated.Image
               style={{
                 width: spin,
@@ -121,24 +115,21 @@ class App extends React.Component {
               source={require('./assets/images/tinko.png')}
             />
           </TouchableWithoutFeedback>
-
         </View>
 
-        <ButtonContainer callbackButton={this.callbackButton.bind(this)}></ButtonContainer>
+        <ButtonContainer
+          callbackButton={this.callbackButton.bind(this)}></ButtonContainer>
       </>
-    )
+    );
   }
 
   spin() {
-    this.spinValue.setValue(0)
-    Animated.timing(
-      this.spinValue,
-      {
-        toValue: 1,
-        duration: 500,
-        easing: Easing.bounce
-      }
-    ).start()
+    this.spinValue.setValue(0);
+    Animated.timing(this.spinValue, {
+      toValue: 1,
+      duration: 500,
+      easing: Easing.bounce,
+    }).start();
   }
 
   callbackButton(name) {
@@ -147,28 +138,26 @@ class App extends React.Component {
   }
 
   onPressButton() {
-
     this.spin();
     // NOTE: Make sound along with selected button
     try {
       // play the file tone.mp3
       const files = {
-        'BELL': 'Ching',
-        'CLAP': 'Clap',
-        'CYMBAL': 'Cymbal',
-        'VOICE': 'Vox'
-      }
-      const file = files[buttonState]
+        BELL: 'Ching',
+        CLAP: 'Clap',
+        CYMBAL: 'Cymbal',
+        VOICE: 'Vox',
+      };
+      const file = files[buttonState];
       if (buttonState == 'RECORD') {
-
         if (this.props.hasVoice) {
           this.onStartPlay();
         }
       } else {
-        SoundPlayer.playSoundFile(file, 'wav')
+        SoundPlayer.playSoundFile(file, 'wav');
       }
     } catch (e) {
-      console.log(`cannot play the sound file`, e)
+      console.log(`cannot play the sound file`, e);
     }
   }
 
@@ -189,25 +178,25 @@ class App extends React.Component {
   };
 }
 
-
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     hasVoice: state.hasVoice,
-  }
+  };
 };
 
 // const ActionCreators = Object.assign(
 //   {},
 //   changeVoice,
 // );
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   // actions: bindActionCreators(ActionCreators, dispatch),
   return {
-    changeVoice: (flag) => { dispatch({ type: 'VOICE_CHANGE', payload: flag }) }
+    changeVoice: (flag) => {
+      dispatch({type: 'VOICE_CHANGE', payload: flag});
+    },
     // actions: bindActionCreators(ActionCreators, dispatch),
-  }
+  };
 };
-
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -273,9 +262,6 @@ const styles = StyleSheet.create({
   },
 });
 
-
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App);
 
 // export default App;
