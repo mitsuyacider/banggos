@@ -19,6 +19,7 @@ import Button from './shared/Button';
 import TimeBar from './TimeBar';
 import PlayTime from './PlayTime';
 import RecordingTime from './RecordingTime'
+import { LogLevel, RNFFmpeg } from 'react-native-ffmpeg';
 
 // require the module
 var RNFS = require('react-native-fs');
@@ -207,6 +208,8 @@ class RecordingModal extends React.Component {
                   display: this.state.showPlayBtn ? 'flex' : 'none',
                 }}
                 onPress={() => {
+                  const filePath = RNFS.CachesDirectoryPath + '/hello.m4a';
+                  const filePath2 = RNFS.CachesDirectoryPath + '/voice.m4a';
                   DefaultPreference.set('hasRecordData', 'true')
                     .then(e => {
                       // NOTE: If has existing data, delete it first
@@ -215,18 +218,32 @@ class RecordingModal extends React.Component {
                           if (isExist) {
                             RNFS.unlink(RNFS.CachesDirectoryPath + '/voice.m4a')
                               .then(e => {
-                                RNFS.copyFile(RNFS.CachesDirectoryPath + '/hello.m4a', RNFS.CachesDirectoryPath + '/voice.m4a')
-                                  .then(e => {
+                                RNFFmpeg.execute(`-ss 2 -i ${filePath} ${filePath2}`)
+                                  .then(result => {
                                     this.props.changeVoice(true);
                                     this.props.callbackButton('DONE');
-                                  })
+                                    console.log(`********* FFmpeg process exited with rc=${result}.`);
+                                  });
+
+                                // RNFS.copyFile(RNFS.CachesDirectoryPath + '/hello.m4a', RNFS.CachesDirectoryPath + '/voice.m4a')
+                                //   .then(e => {
+                                //     this.props.changeVoice(true);
+                                //     this.props.callbackButton('DONE');
+                                //   })
                               })
                           } else {
-                            RNFS.copyFile(RNFS.CachesDirectoryPath + '/hello.m4a', RNFS.CachesDirectoryPath + '/voice.m4a')
-                              .then(e => {
+                            RNFFmpeg.execute(`-ss 2 -i ${filePath} ${filePath2}`)
+                              .then(result => {
                                 this.props.changeVoice(true);
                                 this.props.callbackButton('DONE');
-                              })
+                                console.log(`FFmpeg process exited with rc=${result}.`);
+                              });
+
+                            // RNFS.copyFile(RNFS.CachesDirectoryPath + '/hello.m4a', RNFS.CachesDirectoryPath + '/voice.m4a')
+                            //   .then(e => {
+                            // this.props.changeVoice(true);
+                            // this.props.callbackButton('DONE');
+                            //   })
                           }
                         })
                     })
