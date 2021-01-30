@@ -50,6 +50,8 @@ class RecordingModal extends React.Component {
       showRecordingBtn: true,
     }
 
+    console.log('***** recording modal')
+
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
   }

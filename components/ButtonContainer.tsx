@@ -31,10 +31,10 @@ export default class ButtonContainer extends React.Component {
 
     return (
       <>
-        <RecordingModal
+        {/* <RecordingModal
           showModal={this.state.showModal}
           callbackButton={this.callbackModal.bind(this)}
-        />
+        /> */}
         <View style={styles.container}>
           <SoundButton
             title="BELL"
@@ -65,7 +65,8 @@ export default class ButtonContainer extends React.Component {
                 opacity: isVoice ? 1 : 0,
                 top: 0,
               }}
-              onPress={this.onPressVoice.bind(this)}
+              onPressIn={this.onPressVoice.bind(this)}
+              onPressOut={this.onPressOutVoice.bind(this)}
               imgCenterSrc={require('../assets/images/plus.png')}></Button>
           </SoundButton>
         </View>
@@ -73,13 +74,18 @@ export default class ButtonContainer extends React.Component {
     );
   }
 
-  callbackModal(state) {
+  callbackModal(state) {    
     this.setState({showModal: false});
   }
 
   onPressVoice() {
     // NOTE: Show recording view
     // this.setState({ showModal: true });
+    this.props.callbackRecordingButton('pressIn');
+  }
+
+  onPressOutVoice() {
+    this.props.callbackRecordingButton('pressOut');
   }
 
   callbackHandler(name) {

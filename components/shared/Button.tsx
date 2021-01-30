@@ -53,6 +53,8 @@ interface ItemProps {
   isLoading?: boolean;
   isDisabled?: boolean;
   onPress?: () => void;
+  onPressOut?: () => void;
+  onPressIn?: () => void;
   style?: any;
   disabledStyle?: any;
   textStyle?: any;
@@ -100,6 +102,8 @@ class Button extends Component<ItemProps, any> {
       <TouchableOpacity
         activeOpacity={this.props.activeOpacity}
         onPress={this.props.onPress}
+        onPressOut={this.props.onPressOut}
+        onPressIn={this.props.onPressIn}
       >
         <View style={{
           ...this.props.style,
