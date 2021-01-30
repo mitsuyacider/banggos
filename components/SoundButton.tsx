@@ -21,8 +21,9 @@ export default class SoundButton extends React.Component {
       'RECORD': require('../assets/images/microphone_black.png'),
     };
     const filePath = filePaths[this.props.title];
-    const backgroundColor = isSelected ? '#FFD228' : 'white';
+    let backgroundColor = isSelected ? '#FFD228' : 'white';
 
+    if (this.props.isRecording) backgroundColor = 'pink';
     return (
       <>
         <TouchableHighlight style={{ ...styles.container, width, backgroundColor }} onPress={() => this.onPressButton(this.props)} underlayColor="white">

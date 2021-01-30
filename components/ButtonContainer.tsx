@@ -54,6 +54,7 @@ export default class ButtonContainer extends React.Component {
             callbackHandler={this.callbackHandler.bind(this)}></SoundButton>
           <SoundButton
             title="RECORD"
+            isRecording={this.props.isRecording}
             selectedName={this.state.selectedName}
             callbackHandler={this.callbackHandler.bind(this)}>
             <Button

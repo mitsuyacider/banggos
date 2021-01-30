@@ -98,14 +98,14 @@ class App extends React.Component {
     return (
       <>
         <Image
-          source={require('./assets/images/bg.png')}
+          source={this.state.isRecording ? require('./assets/images/bgTransparent.png') : require('./assets/images/bg.png')}
           style={{
             width: '100%',
             height: '100%',
             top: 0,
             zIndex: 0,
             position: 'absolute',
-            backgroundColor: 'black',
+            backgroundColor: 'pink',
             borderRadius: 5,
             resizeMode: 'cover',
           }}
@@ -131,7 +131,10 @@ class App extends React.Component {
         </View>
 
         <ButtonContainer
-          callbackButton={this.callbackButton.bind(this)} callbackRecordingButton={this.callbackRecording.bind(this)}></ButtonContainer>
+          callbackButton={this.callbackButton.bind(this)}
+          callbackRecordingButton={this.callbackRecording.bind(this)}
+          isRecording={this.state.isRecording}>
+        </ButtonContainer>
       </>
     );
   }
@@ -142,6 +145,7 @@ class App extends React.Component {
       toValue: 1,
       duration: 500,
       easing: Easing.bounce,
+      useNativeDriver: true
     }).start();
   }
 

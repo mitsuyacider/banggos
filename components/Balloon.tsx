@@ -66,7 +66,9 @@ export default class Balloon extends React.Component {
 			{
 				toValue: 1,
 				duration: 500,
-				easing: Easing.linear
+				easing: Easing.linear,
+				useNativeDriver: true,
+
 			}
 		).start(e => {
 			setTimeout(() => {
@@ -83,7 +85,8 @@ export default class Balloon extends React.Component {
 			{
 				toValue: 0,
 				duration: 200,
-				easing: Easing.linear
+				easing: Easing.linear,
+				useNativeDriver: true,
 			}
 		).start(e => {
 			setTimeout(() => {
