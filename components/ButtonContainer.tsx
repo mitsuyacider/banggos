@@ -55,7 +55,7 @@ export default class ButtonContainer extends React.Component {
             <View style={{
               flexDirection:'row',
               justifyContent: 'space-between',
-              display:isVoice ? 'flex' : 'none'
+              opacity: isVoice ? 1 : 0
             }}>
               <View
                 style={{
@@ -93,8 +93,8 @@ export default class ButtonContainer extends React.Component {
                 onPressOut={this.onPressOutVoice.bind(this)}
                 imgCenterSrc={require('../assets/images/plus.png')}>              
               </Button>              
-            </View>
-          </SoundButton>
+            </View>       
+          </SoundButton>          
         </View>
       </>
     );

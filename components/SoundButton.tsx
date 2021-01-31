@@ -1,18 +1,21 @@
 import React, { useState, useReducer } from 'react';
-import { Animated, View, Text, TouchableHighlight, StyleSheet, Image } from 'react-native';
+import { Animated, View, Text, TouchableHighlight, StyleSheet, Image, Easing } from 'react-native';
 
 export default class SoundButton extends React.Component {
   constructor(props) {
     super();
     this.props = props;
-
-    this.animVal = new Animated.Value(0);
-    this.interpolateIcon = this.animVal.interpolate({ inputRange: [30, 80], outputRange: [0, 1] })
+    this.animVal = new Animated.Value(30);
+    this.updateButtonWidth();
   }
 
   render() {
     const isSelected = this.props.title == this.props.selectedName
-    const width = isSelected ? 90 : 30;
+    const width = this.animVal.interpolate({
+      inputRange: [30, 90],
+      outputRange: [30, 90]
+    });
+
     const filePaths = {
       'BELL': require('../assets/images/bellThumbnail.png'),
       'CYMBAL': require('../assets/images/cymbalThumbnail.png'),
@@ -21,13 +24,14 @@ export default class SoundButton extends React.Component {
       'RECORD': require('../assets/images/microphone_black.png'),
     };
     const filePath = filePaths[this.props.title];
-    let backgroundColor = isSelected ? '#FFD228' : 'white';
 
+    let backgroundColor = isSelected ? '#FFD228' : 'white';
     if (this.props.isRecording) backgroundColor = 'pink';
+
     return (
       <>
-        <TouchableHighlight style={{ ...styles.container, width, backgroundColor }} onPress={() => this.onPressButton(this.props)} underlayColor="white">
-          <Animated.View>
+        <TouchableHighlight style={{ ...styles.container, backgroundColor }} onPress={() => this.onPressButton(this.props)} underlayColor="white">
+          <Animated.View style={{ width }}>
             <Image
               source={filePath}
               style={{ ...styles.image, opacity: isSelected ? 1 : 0 }}
@@ -43,6 +47,24 @@ export default class SoundButton extends React.Component {
     );
   }
 
+  componentDidUpdate(prevProps) {
+    this.updateButtonWidth();
+  }
+
+  updateButtonWidth() {
+    const isSelected = this.props.title == this.props.selectedName
+    const width = isSelected ? 90 : 30;
+    Animated.timing(
+      this.animVal,
+      {
+        toValue: width,
+        duration: 80,
+        easing: Easing.linear,
+        useNativeDriver: false,
+      }
+    ).start();
+  }
+
   onPressButton(props) {
     props.callbackHandler(props.title);
   };
@@ -56,6 +78,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 5,
     borderTopLeftRadius: 5,
     marginLeft: 'auto',
+    position: 'relative',
     zIndex: 2
   },
   text: {
