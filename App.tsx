@@ -14,16 +14,8 @@ import ButtonContainer from './components/ButtonContainer';
 import Balloon from './components/Balloon';
 import { connect } from 'react-redux';
 import VoiceRecorder from "./scripts/VoiceRecorder";
-import AudioRecorderPlayer, {
-  AVEncoderAudioQualityIOSType,
-  AVEncodingOption,
-  AudioEncoderAndroidType,
-  AudioSet,
-  AudioSourceAndroidType,
-} from 'react-native-audio-recorder-player';
 import DefaultPreference from 'react-native-default-preference';
 import osc from 'react-native-osc';
-import { RNFFmpeg } from 'react-native-ffmpeg';
 
 
 const RNFS = require('react-native-fs');
@@ -66,7 +58,45 @@ class App extends React.Component {
     }
   }
 
-  setupOSC() {
+  render() {
+    const spinValue = this.spinValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['90%', '100%'],
+    });
+
+    const bgColor = this.bgColor.interpolate({
+      inputRange: [-500, 500],
+      outputRange: ['rgba(255, 160, 167, 1)', 'rgba(139, 0, 0, 1)']
+    });
+    return (
+      <>
+        <Animated.Image
+          source={this.state.isRecording ? require('./assets/images/bgTransparent.png') : require('./assets/images/bg.png')}
+          style={{ ...styles.background, backgroundColor: bgColor }}
+        />
+        <View style={styles.scrollView}>
+          {/* NOTE: Balloon */}
+          <Balloon></Balloon>
+
+          <TouchableWithoutFeedback onPress={this.onPressButton.bind(this)}>
+            <Animated.Image
+              style={{ width: spinValue, ...styles.tinko }}
+              source={require('./assets/images/tinko.png')}
+            />
+          </TouchableWithoutFeedback>
+        </View>
+
+        <ButtonContainer
+          callbackButton={this.callbackButton.bind(this)}
+          callbackRecordingButton={this.callbackRecording.bind(this)}
+          isRecording={this.state.isRecording}
+          recordSecs={this.state.timeLeft}>
+        </ButtonContainer>
+      </>
+    );
+  }
+
+  private setupOSC() {
     // NOTE: Create a client and send a message
     osc.createClient('192.168.1.0', portOut);
     osc.sendMessage('/address/', [1.0, 0.0]);
@@ -84,62 +114,7 @@ class App extends React.Component {
     osc.createServer('', portIn);
   }
 
-  render() {
-    const spinValue = this.spinValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['90%', '100%'],
-    });
-
-    const bgColor = this.bgColor.interpolate({
-      inputRange: [-500, 500],
-      outputRange: ['rgba(255, 160, 167, 1)', 'rgba(139, 0, 0, 1)']
-    });
-    return (
-      <>
-        <Animated.Image
-          source={this.state.isRecording ? require('./assets/images/bgTransparent.png') : require('./assets/images/bg.png')}
-          style={{
-            width: '100%',
-            height: '100%',
-            top: 0,
-            zIndex: 0,
-            position: 'absolute',
-            backgroundColor: bgColor,
-            borderRadius: 5,
-            resizeMode: 'cover',
-          }}
-        />
-        <View style={styles.scrollView}>
-          {/* NOTE: Balloon */}
-          <Balloon></Balloon>
-
-          <TouchableWithoutFeedback onPress={this.onPressButton.bind(this)}>
-            <Animated.Image
-              style={{
-                width: spinValue,
-                height: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
-                zIndex: 2,
-                resizeMode: 'contain',
-                // transform: [{ rotate: spin }]
-              }}
-              source={require('./assets/images/tinko.png')}
-            />
-          </TouchableWithoutFeedback>
-        </View>
-
-        <ButtonContainer
-          callbackButton={this.callbackButton.bind(this)}
-          callbackRecordingButton={this.callbackRecording.bind(this)}
-          isRecording={this.state.isRecording}
-          recordSecs={this.state.timeLeft}>
-        </ButtonContainer>
-      </>
-    );
-  }
-
-  spin() {
+  private spin() {
     this.spinValue.setValue(0);
     Animated.timing(this.spinValue, {
       toValue: 1,
@@ -268,64 +243,22 @@ const styles = StyleSheet.create({
   scrollView: {
     position: 'relative',
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
   background: {
-    backgroundColor: '#FFCC24',
     width: '100%',
     height: '100%',
+    top: 0,
+    zIndex: 0,
     position: 'absolute',
-
-    top: '50%',
-    zIndex: 1,
+    borderRadius: 5,
+    resizeMode: 'cover',
   },
-  bg: {
-    overflow: 'visible',
+  tinko: {
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 2,
     resizeMode: 'contain',
-    /*
-     * These negative margins allow the image to be offset similarly across screen sizes and component sizes.
-     *
-     * The source logo.png image is 512x512px, so as such, these margins attempt to be relative to the
-     * source image's size.
-     */
-  },
-  text: {
-    fontSize: 40,
-    fontWeight: '600',
-    textAlign: 'center',
-    color: Colors.black,
-  },
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
