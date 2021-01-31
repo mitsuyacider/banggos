@@ -39,11 +39,6 @@ class App extends React.Component {
     addOscListener(this.playSound.bind(this));
 
     this.state = {
-      recordTime: '00:00',
-      currentPositionSec: 0,
-      currentDurationSec: 0,
-      playTime: '00:00',
-      duration: '00:00',
       isPlaying: false,
       isRecording: false,
       timeLeft: 8
@@ -88,6 +83,9 @@ class App extends React.Component {
     );
   }
 
+  /**
+   * NOTE: Scale up/down everytime a click event occurs.
+   */
   private scaleUpAnimation() {
     this.scaleValue.setValue(0);
     Animated.timing(this.scaleValue, {
@@ -97,33 +95,37 @@ class App extends React.Component {
     }).start();
   }
 
-  private callbackRecording(state) {
-    if (state === 'pressIn') {
+  /**
+   * NOTE: Record button event
+   * @param buttonState pressIn (mouse down) / pressOut (mouse leave)
+   */
+  private callbackRecording(buttonState: String) {
+    if (buttonState === 'pressIn') {
       // NOTE: Start recording while pressing
       this.onStartRecord();
-    } else if (state === 'pressOut') {
+    } else if (buttonState === 'pressOut') {
       // NOTE: Stop recording
       this.onStopRecord().then(this.audioRecorderPlayer.trimSilenceAudio);
     }
   }
 
+  /**
+   * NOTE: Start recording
+   */
   private onStartRecord = async () => {
     this.setState({ isRecording: true, showPlayView: false });
     const uri = await this.audioRecorderPlayer.onStartRecord();
     this.audioRecorderPlayer.addRecordBackListener(this.onRecordBackListener.bind(this));
   };
 
+  /**
+   * NOTE: Callback during recording
+   */
   private onRecordBackListener = (e: any) => {
-    const recordTime = this.audioRecorderPlayer.mmssss(
-      Math.floor(e.current_position),
-    ).slice(3);
     const current = Math.floor(e.current_position / 1000);
     const timeLeft = MAX_RECORDING_TIME - current;
 
-    this.setState({
-      recordTime,
-      timeLeft
-    });
+    this.setState({ timeLeft });
 
     const value = 500 * Math.sin(e.current_position / 400);
     this.bgColor.setValue(value);
@@ -133,6 +135,9 @@ class App extends React.Component {
     }
   }
 
+  /**
+   * NOTE: Stop recording
+   */
   private onStopRecord = async () => {
     const result = await this.audioRecorderPlayer.onStopRecord();
 
@@ -145,6 +150,10 @@ class App extends React.Component {
     return result;
   };
 
+  /**
+   * NOTE: Callback on side menu button
+   * @param name button name
+   */
   private callbackButton(name) {
     this.audioRecorderPlayer.stopPlayer();
     buttonState = name;
@@ -180,9 +189,7 @@ class App extends React.Component {
       android: 'sdcard/hello.mp4',
     });
 
-    this.setState({
-      isPlaying: true,
-    });
+    this.setState({ isPlaying: true });
 
     this.audioRecorderPlayer.seekToPlayer(0);
     this.audioRecorderPlayer.stopPlayer();

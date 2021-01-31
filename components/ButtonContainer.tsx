@@ -15,7 +15,7 @@ export default class ButtonContainer extends React.Component {
     this.props = props;
 
     this.state = {
-      selectedName: 'RECORD',
+      selectedName: 'BELL',
       showModal: false,
       text:'Keep pressing during your record'
     };
