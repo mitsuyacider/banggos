@@ -51,6 +51,7 @@ class App extends React.Component {
     this.props = props;
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.spinValue = new Animated.Value(0);
+    this.bgColor = new Animated.Value(0);
 
     // NOTE: Initialize
     DefaultPreference.get('hasRecordData')
@@ -97,9 +98,13 @@ class App extends React.Component {
       outputRange: ['90%', '100%'],
     });
 
+    const bgColor = this.bgColor.interpolate({
+      inputRange: [-500, 500],
+      outputRange: ['rgba(255, 160, 167, 1)', 'rgba(139, 0, 0, 1)']
+    });
     return (
       <>
-        <Image
+        <Animated.Image
           source={this.state.isRecording ? require('./assets/images/bgTransparent.png') : require('./assets/images/bg.png')}
           style={{
             width: '100%',
@@ -107,7 +112,7 @@ class App extends React.Component {
             top: 0,
             zIndex: 0,
             position: 'absolute',
-            backgroundColor: 'pink',
+            backgroundColor: bgColor,
             borderRadius: 5,
             resizeMode: 'cover',
           }}
@@ -253,6 +258,9 @@ class App extends React.Component {
         recordTime,
         timeLeft
       });
+
+      const value = 500 * Math.sin(e.current_position / 400);
+      this.bgColor.setValue(value);
 
       if (e.current_position >= MAX_RECORDING_TIME * 1000) {
         this.onStopRecord().then(this.trimSilenceAudio.bind(this));
