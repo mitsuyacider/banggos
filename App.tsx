@@ -3,25 +3,18 @@ import {
   StyleSheet,
   View,
   TouchableWithoutFeedback,
-  NativeEventEmitter,
   Animated,
   Easing,
 } from 'react-native';
 
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { connect } from 'react-redux';
+import { addOscListener } from "./scripts/addOscListener";
 import SoundPlayer from 'react-native-sound-player';
 import ButtonContainer from './components/ButtonContainer';
 import Balloon from './components/Balloon';
-import { connect } from 'react-redux';
 import VoiceRecorder from "./scripts/VoiceRecorder";
 import DefaultPreference from 'react-native-default-preference';
-import osc from 'react-native-osc';
 
-
-const RNFS = require('react-native-fs');
-
-const portIn = 9999;
-const portOut = 8888;
 const MAX_RECORDING_TIME = 8
 
 let buttonState = 'BELL';
@@ -31,7 +24,7 @@ class App extends React.Component {
     super(props);
 
     this.audioRecorderPlayer = new VoiceRecorder();
-    this.spinValue = new Animated.Value(0);
+    this.scaleValue = new Animated.Value(0);
     this.bgColor = new Animated.Value(0);
 
     // NOTE: Initialize
@@ -43,10 +36,9 @@ class App extends React.Component {
       .catch((err) => { console.log(err); });
 
     // NOTE: Initialize osc settings
-    this.setupOSC();
+    addOscListener(this.playSound.bind(this));
 
     this.state = {
-      recordSecs: 0,
       recordTime: '00:00',
       currentPositionSec: 0,
       currentDurationSec: 0,
@@ -59,7 +51,7 @@ class App extends React.Component {
   }
 
   render() {
-    const spinValue = this.spinValue.interpolate({
+    const scaleValue = this.scaleValue.interpolate({
       inputRange: [0, 1],
       outputRange: ['90%', '100%'],
     });
@@ -78,9 +70,9 @@ class App extends React.Component {
           {/* NOTE: Balloon */}
           <Balloon></Balloon>
 
-          <TouchableWithoutFeedback onPress={this.onPressButton.bind(this)}>
+          <TouchableWithoutFeedback onPress={this.playSound.bind(this)}>
             <Animated.Image
-              style={{ width: spinValue, ...styles.tinko }}
+              style={{ width: scaleValue, ...styles.tinko }}
               source={require('./assets/images/tinko.png')}
             />
           </TouchableWithoutFeedback>
@@ -96,34 +88,16 @@ class App extends React.Component {
     );
   }
 
-  private setupOSC() {
-    // NOTE: Create a client and send a message
-    osc.createClient('192.168.1.0', portOut);
-    osc.sendMessage('/address/', [1.0, 0.0]);
-
-    // NOTE: Suscribe to GotMessage event to receive OSC messages
-    const eventEmitter = new NativeEventEmitter(osc);
-    eventEmitter.addListener('GotMessage', (oscMessage) => {
-      console.log('oscmessege', oscMessage);
-
-      if (oscMessage.address === '/sexy/60') {
-        this.onPressButton();
-      }
-    });
-
-    osc.createServer('', portIn);
-  }
-
-  private spin() {
-    this.spinValue.setValue(0);
-    Animated.timing(this.spinValue, {
+  private scaleUpAnimation() {
+    this.scaleValue.setValue(0);
+    Animated.timing(this.scaleValue, {
       toValue: 1,
       duration: 500,
       easing: Easing.bounce,
     }).start();
   }
 
-  callbackRecording(state) {
+  private callbackRecording(state) {
     if (state === 'pressIn') {
       // NOTE: Start recording while pressing
       this.onStartRecord();
@@ -147,7 +121,6 @@ class App extends React.Component {
     const timeLeft = MAX_RECORDING_TIME - current;
 
     this.setState({
-      recordSecs: e.current_position,
       recordTime,
       timeLeft
     });
@@ -164,7 +137,6 @@ class App extends React.Component {
     const result = await this.audioRecorderPlayer.onStopRecord();
 
     this.setState({
-      recordSecs: 0,
       isRecording: false,
       showPlayView: true,
       showPlayBtn: true
@@ -173,13 +145,13 @@ class App extends React.Component {
     return result;
   };
 
-  callbackButton(name) {
+  private callbackButton(name) {
     this.audioRecorderPlayer.stopPlayer();
     buttonState = name;
   }
 
-  onPressButton() {
-    this.spin();
+  private playSound() {
+    this.scaleUpAnimation();
     // NOTE: Make sound along with selected button
     try {
       // play the file tone.mp3
@@ -202,7 +174,7 @@ class App extends React.Component {
     }
   }
 
-  onStartPlay = async () => {
+  private onStartPlay = async () => {
     const path = Platform.select({
       ios: 'voice.m4a',
       android: 'sdcard/hello.mp4',
