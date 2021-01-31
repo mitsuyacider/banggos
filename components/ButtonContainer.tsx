@@ -10,13 +10,10 @@ import Button from './shared/Button';
 
 export default class ButtonContainer extends React.Component {
   constructor(props) {
-    super();
-
-    this.props = props;
+    super(props);
 
     this.state = {
       selectedName: 'BELL',
-      showModal: false,
       text:'Keep pressing during your record'
     };
 
@@ -25,7 +22,6 @@ export default class ButtonContainer extends React.Component {
 
   render() {
     const isVoice = this.state.selectedName === 'RECORD';
-    // const [modalVisible, setModalVisible] = useState(false);
 
     return (
       <>
@@ -52,43 +48,18 @@ export default class ButtonContainer extends React.Component {
             selectedName={this.state.selectedName}
             callbackHandler={this.callbackHandler.bind(this)}>
             
-            <View style={{
-              flexDirection:'row',
-              justifyContent: 'space-between',
-              opacity: isVoice ? 1 : 0
-            }}>
+            {/* NOTE: Recording container */}
+            <View style={{ ...styles.recordingContainer, opacity: isVoice ? 1 : 0 }}>
+              {/* NOTE: Bubble */}
               <View
-                style={{
-                  marginRight: 30,
-                  color: 'white',
-                  justifyContent: 'center',
-                  alignItems:'center',
-                  width: 250,
-                  height: 80,
-                  borderRadius: 8,
-                  zIndex:-1,
-                  backgroundColor:'white'
-                }
-                }>
-                <Text style={{
-                  color: 'black',
-                  fontSize: 20,
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                  padding: 5
-                  }}>{this.getRecordingBallonText()}</Text>
-                  
-                  <View style={styles.triangle} />
+                style={{ ...styles.bubbleContainer }}>
+                <Text style={{ ...styles.bubbleText }}>{this.getRecordingBallonText()}</Text>                  
+                <View style={styles.triangle} />
               </View>
-                  
+              
+              {/* NOTE: Recording button */}
               <Button
-                style={{
-                  width: 70,
-                  height: 70,
-                  backgroundColor: 'black',
-                  marginLeft: 'auto',
-                  top: 0,
-                }}
+                style={{ ...styles.recordingButton }}
                 onPressIn={this.onPressVoice.bind(this)}
                 onPressOut={this.onPressOutVoice.bind(this)}
                 imgCenterSrc={require('../assets/images/plus.png')}>              
@@ -100,7 +71,12 @@ export default class ButtonContainer extends React.Component {
     );
   }
 
-  getRecordingBallonText() {
+  /**
+   * NOTE: If now recording, return time count.
+   * Otherwise return annotation text.
+   * @return Bubble text
+   */
+  private getRecordingBallonText() {
     let text = '';
 
     if (this.props.isRecording) {
@@ -112,21 +88,24 @@ export default class ButtonContainer extends React.Component {
     return text;
   }
 
-  callbackModal(state) {    
-    this.setState({showModal: false});
-  }
-
-  onPressVoice() {
-    // NOTE: Show recording view
-    // this.setState({ showModal: true });
+  /**
+   * NOTE: Start recording
+   */
+  private onPressVoice() {
     this.props.callbackRecordingButton('pressIn');
   }
 
-  onPressOutVoice() {
+  /**
+   * NOTE: Stop recording
+   */
+  private onPressOutVoice() {
     this.props.callbackRecordingButton('pressOut');
   }
 
-  callbackHandler(name) {
+  /**
+   * NOTE: Callback on each side menu buttons.
+   */
+  private callbackHandler(name) {
     this.setState({selectedName: name});
     this.props.callbackButton(name);
   }
@@ -157,5 +136,34 @@ const styles = StyleSheet.create({
     borderRightColor: 'transparent',
     borderBottomColor: 'transparent',
     borderLeftColor: "white",    
+  },
+  bubbleContainer: {
+    marginRight: 30,
+    color: 'white',
+    justifyContent: 'center',
+    alignItems:'center',
+    width: 250,
+    height: 80,
+    borderRadius: 8,
+    zIndex:-1,
+    backgroundColor:'white'    
+  },
+  bubbleText: {
+    color: 'black',
+    fontSize: 20,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    padding: 5    
+  },
+  recordingButton: {
+    width: 70,
+    height: 70,
+    backgroundColor: 'black',
+    marginLeft: 'auto',
+    top: 0,    
+  },
+  recordingContainer: {
+    flexDirection:'row',
+    justifyContent: 'space-between',
   }
 });
