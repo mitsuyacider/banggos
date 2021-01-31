@@ -3,6 +3,7 @@ import {
   View,
   StyleSheet,
   Text,
+  Image,
   TouchableHighlight,
   Modal,
   Alert,
@@ -10,6 +11,8 @@ import {
 import SoundButton from './SoundButton';
 import RecordingModal from './RecordingModal';
 import Button from './shared/Button';
+import Balloon from './Balloon';
+
 
 export default class ButtonContainer extends React.Component {
   constructor(props) {
@@ -18,8 +21,9 @@ export default class ButtonContainer extends React.Component {
     this.props = props;
 
     this.state = {
-      selectedName: 'BELL',
+      selectedName: 'RECORD',
       showModal: false,
+      text:'Keep pressing during your record'
     };
 
     this.child = React.createRef();
@@ -57,18 +61,61 @@ export default class ButtonContainer extends React.Component {
             isRecording={this.props.isRecording}
             selectedName={this.state.selectedName}
             callbackHandler={this.callbackHandler.bind(this)}>
+
+            {/* NOTE: Balloon */}
+            {/* <Balloon></Balloon> */}
+
+            <View style={{
+              display: 'flex',
+              flexDirection:'row',
+              justifyContent: 'space-between',
+              opacity: isVoice ? 1 : 0,
+          }}>
+            <View
+              style={{
+                marginRight:10,
+                color: 'white',
+                justifyContent: 'center',
+                width: 250,
+                height: 100,
+                zIndex: 5,
+              }
+              }>
+              <Image
+                source={require('../assets/images/balloon.png')}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  top: 0,
+                  zIndex: 0,
+                  position: 'absolute',
+                  borderRadius: 5,
+                  resizeMode: 'cover',
+                }}
+              />
+              <Text style={{
+                color: 'black',
+                fontSize: 20,
+                textAlign: 'center',
+                marginTop: -20,
+                fontWeight: 'bold',
+                padding: 5
+              }}>{this.state.text}</Text>
+            </View>
+                  
             <Button
               style={{
                 width: 70,
                 height: 70,
                 backgroundColor: 'black',
                 marginLeft: 'auto',
-                opacity: isVoice ? 1 : 0,
                 top: 0,
               }}
               onPressIn={this.onPressVoice.bind(this)}
               onPressOut={this.onPressOutVoice.bind(this)}
-              imgCenterSrc={require('../assets/images/plus.png')}></Button>
+              imgCenterSrc={require('../assets/images/plus.png')}>              
+            </Button>              
+          </View>
           </SoundButton>
         </View>
       </>
