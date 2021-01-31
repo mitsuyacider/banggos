@@ -3,15 +3,9 @@ import {
   View,
   StyleSheet,
   Text,
-  Image,
-  TouchableHighlight,
-  Modal,
-  Alert,
 } from 'react-native';
 import SoundButton from './SoundButton';
-import RecordingModal from './RecordingModal';
 import Button from './shared/Button';
-import Balloon from './Balloon';
 
 
 export default class ButtonContainer extends React.Component {
@@ -35,11 +29,7 @@ export default class ButtonContainer extends React.Component {
 
     return (
       <>
-        {/* <RecordingModal
-          showModal={this.state.showModal}
-          callbackButton={this.callbackModal.bind(this)}
-        /> */}
-        <View style={styles.container}>
+        <View pointerEvents="box-none" style={styles.container}>
           <SoundButton
             title="BELL"
             selectedName={this.state.selectedName}
@@ -61,65 +51,65 @@ export default class ButtonContainer extends React.Component {
             isRecording={this.props.isRecording}
             selectedName={this.state.selectedName}
             callbackHandler={this.callbackHandler.bind(this)}>
-
-            {/* NOTE: Balloon */}
-            {/* <Balloon></Balloon> */}
-
+            
             <View style={{
-              display: 'flex',
               flexDirection:'row',
               justifyContent: 'space-between',
-              opacity: isVoice ? 1 : 0,
-          }}>
-            <View
-              style={{
-                marginRight:10,
-                color: 'white',
-                justifyContent: 'center',
-                width: 250,
-                height: 100,
-                zIndex: 5,
-              }
-              }>
-              <Image
-                source={require('../assets/images/balloon.png')}
+              display:isVoice ? 'flex' : 'none'
+            }}>
+              <View
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  top: 0,
-                  zIndex: 0,
-                  position: 'absolute',
-                  borderRadius: 5,
-                  resizeMode: 'cover',
-                }}
-              />
-              <Text style={{
-                color: 'black',
-                fontSize: 20,
-                textAlign: 'center',
-                marginTop: -20,
-                fontWeight: 'bold',
-                padding: 5
-              }}>{this.state.text}</Text>
-            </View>
+                  marginRight: 30,
+                  color: 'white',
+                  justifyContent: 'center',
+                  alignItems:'center',
+                  width: 250,
+                  height: 80,
+                  borderRadius: 8,
+                  zIndex:-1,
+                  backgroundColor:'white'
+                }
+                }>
+                <Text style={{
+                  color: 'black',
+                  fontSize: 20,
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  padding: 5
+                  }}>{this.getRecordingBallonText()}</Text>
                   
-            <Button
-              style={{
-                width: 70,
-                height: 70,
-                backgroundColor: 'black',
-                marginLeft: 'auto',
-                top: 0,
-              }}
-              onPressIn={this.onPressVoice.bind(this)}
-              onPressOut={this.onPressOutVoice.bind(this)}
-              imgCenterSrc={require('../assets/images/plus.png')}>              
-            </Button>              
-          </View>
+                  <View style={styles.triangle} />
+              </View>
+                  
+              <Button
+                style={{
+                  width: 70,
+                  height: 70,
+                  backgroundColor: 'black',
+                  marginLeft: 'auto',
+                  top: 0,
+                }}
+                onPressIn={this.onPressVoice.bind(this)}
+                onPressOut={this.onPressOutVoice.bind(this)}
+                imgCenterSrc={require('../assets/images/plus.png')}>              
+              </Button>              
+            </View>
           </SoundButton>
         </View>
       </>
     );
+  }
+
+  getRecordingBallonText() {
+    let text = '';
+
+    if (this.props.isRecording) {
+      text = `${this.props.recordSecs} seconds left`;
+    } else {
+      text = this.state.text;
+    }
+
+    return text;
   }
 
   callbackModal(state) {    
@@ -152,4 +142,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: '100%',
   },
+  triangle: {
+    width: 0,
+    height: 0,
+    right: -20,
+    position:'absolute',
+    backgroundColor: "transparent",
+    borderStyle: "solid",
+    borderTopWidth: 12,
+    borderBottomWidth: 12,
+    borderLeftWidth: 25,
+    borderRightWidth: 0,
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: 'transparent',
+    borderLeftColor: "white",    
+  }
 });

@@ -40,6 +40,7 @@ const RNFS = require('react-native-fs');
 
 const portIn = 9999;
 const portOut = 8888;
+const MAX_RECORDING_TIME = 8
 
 let buttonState = 'BELL';
 
@@ -86,11 +87,12 @@ class App extends React.Component {
       duration: '00:00',
       isPlaying: false,
       isRecording: false,
+      timeLeft: 8
     }
   }
 
   render() {
-    const spin = this.spinValue.interpolate({
+    const spinValue = this.spinValue.interpolate({
       inputRange: [0, 1],
       outputRange: ['90%', '100%'],
     });
@@ -117,7 +119,7 @@ class App extends React.Component {
           <TouchableWithoutFeedback onPress={this.onPressButton.bind(this)}>
             <Animated.Image
               style={{
-                width: spin,
+                width: spinValue,
                 height: '100%',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -133,7 +135,8 @@ class App extends React.Component {
         <ButtonContainer
           callbackButton={this.callbackButton.bind(this)}
           callbackRecordingButton={this.callbackRecording.bind(this)}
-          isRecording={this.state.isRecording}>
+          isRecording={this.state.isRecording}
+          recordSecs={this.state.timeLeft}>
         </ButtonContainer>
       </>
     );
@@ -145,7 +148,7 @@ class App extends React.Component {
       toValue: 1,
       duration: 500,
       easing: Easing.bounce,
-      useNativeDriver: true
+      // useNativeDriver: true
     }).start();
   }
 
@@ -239,14 +242,19 @@ class App extends React.Component {
     this.setState({ isRecording: true, showPlayView: false });
     const uri = await this.audioRecorderPlayer.startRecorder(path, audioSet);
     this.audioRecorderPlayer.addRecordBackListener((e: any) => {
+      const recordTime = this.audioRecorderPlayer.mmssss(
+        Math.floor(e.current_position),
+      ).slice(3);
+      const current = Math.floor(e.current_position / 1000);
+      const timeLeft = MAX_RECORDING_TIME - current;
+
       this.setState({
         recordSecs: e.current_position,
-        recordTime: this.audioRecorderPlayer.mmssss(
-          Math.floor(e.current_position),
-        ).slice(3),
+        recordTime,
+        timeLeft
       });
 
-      if (e.current_position >= 8000) {
+      if (e.current_position >= MAX_RECORDING_TIME * 1000) {
         this.onStopRecord().then(this.trimSilenceAudio.bind(this));
       }
     });
