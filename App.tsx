@@ -140,12 +140,14 @@ class App extends React.Component {
    */
   private onStopRecord = async () => {
     const result = await this.audioRecorderPlayer.onStopRecord();
-
     this.setState({
       isRecording: false,
       showPlayView: true,
       showPlayBtn: true
     });
+
+    this.props.changeVoice(true);
+    DefaultPreference.set('hasRecordData', 'true');
 
     return result;
   };
@@ -172,6 +174,7 @@ class App extends React.Component {
       };
       const file = files[buttonState];
       if (buttonState == 'RECORD') {
+        console.log('*** has voice', this.props.hasVoice)
         if (this.props.hasVoice) {
           this.onStartPlay();
         }
