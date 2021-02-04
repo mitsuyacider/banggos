@@ -158,7 +158,8 @@ const styles = StyleSheet.create({
   recordingButton: {
     width: 70,
     height: 70,
-    backgroundColor: 'black',
+    marginTop: 10,
+    marginRight:5,
     marginLeft: 'auto',
     top: 0,    
   },

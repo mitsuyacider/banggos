@@ -53,7 +53,7 @@ class App extends React.Component {
 
     const bgColor = this.bgColor.interpolate({
       inputRange: [-500, 500],
-      outputRange: ['rgba(255, 160, 167, 1)', 'rgba(139, 0, 0, 1)']
+      outputRange: ['#990C01', '#FF1200']
     });
     return (
       <>
@@ -65,7 +65,7 @@ class App extends React.Component {
           {/* NOTE: Balloon */}
           <Balloon></Balloon>
 
-          <TouchableWithoutFeedback onPress={this.playSound.bind(this)}>
+          <TouchableWithoutFeedback onPressIn={this.playSound.bind(this)}>
             <Animated.Image
               style={{ width: scaleValue, ...styles.tinko }}
               source={require('./assets/images/tinko.png')}

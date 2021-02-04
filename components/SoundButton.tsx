@@ -26,7 +26,7 @@ export default class SoundButton extends React.Component {
     const filePath = filePaths[this.props.title];
 
     let backgroundColor = isSelected ? '#FFD228' : 'white';
-    if (this.props.isRecording) backgroundColor = 'pink';
+    if (this.props.isRecording) backgroundColor = '#FF2400';
 
     return (
       <>
