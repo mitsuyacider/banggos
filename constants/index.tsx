@@ -1,1 +1,2 @@
 export const VOICE_CHANGE = 'VOICE_CHANGE';
+export const THRESHOLD_CHANGE = 'THRESHOLD_CHANGE';

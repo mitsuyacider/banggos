@@ -100,12 +100,13 @@ class App extends React.Component {
    * @param buttonState pressIn (mouse down) / pressOut (mouse leave)
    */
   private callbackRecording(buttonState: String) {
+    console.log('callback recoding', this.props.inputText)
     if (buttonState === 'pressIn') {
       // NOTE: Start recording while pressing
       this.onStartRecord();
     } else if (buttonState === 'pressOut') {
       // NOTE: Stop recording
-      this.onStopRecord().then(this.audioRecorderPlayer.trimSilenceAudio);
+      this.onStopRecord().then(e => this.audioRecorderPlayer.trimSilenceAudio(this.props.inputText));
     }
   }
 
@@ -131,7 +132,7 @@ class App extends React.Component {
     this.bgColor.setValue(value);
 
     if (e.current_position >= MAX_RECORDING_TIME * 1000) {
-      this.onStopRecord().then(this.audioRecorderPlayer.trimSilenceAudio);
+      this.onStopRecord().then(e => this.audioRecorderPlayer.trimSilenceAudio(this.props.inputText));
     }
   }
 
@@ -202,8 +203,10 @@ class App extends React.Component {
 }
 
 const mapStateToProps = (state) => {
+  console.log('*** state.input', state.inputText)
   return {
     hasVoice: state.hasVoice,
+    inputText: state.inputText
   };
 };
 

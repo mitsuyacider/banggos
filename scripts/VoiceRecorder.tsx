@@ -14,12 +14,16 @@ export default class VoiceRecorder extends AudioRecorderPlayer {
     super();
   }
 
-  trimSilenceAudio = async () => {
+  trimSilenceAudio = async (value) => {
     const filePath = RNFS.CachesDirectoryPath + '/hello.m4a';
     const filePath2 = RNFS.CachesDirectoryPath + '/voice.m4a';
 
+    const db = parseFloat(value) ? parseFloat(value) : -20;
+
+    console.log('****db', db)
+
     // NOTE: Command for ffmpeg to trim silence audio
-    const executeFFmpeg = () => RNFFmpeg.execute(`-i ${filePath} -af silenceremove=1:0:-20dB ${filePath2}`);
+    const executeFFmpeg = () => RNFFmpeg.execute(`-i ${filePath} -af silenceremove=1:0:${db}dB ${filePath2}`);
 
     const outcome = await RNFS.exists(RNFS.CachesDirectoryPath + '/voice.m4a')
       .then(isExist => {
