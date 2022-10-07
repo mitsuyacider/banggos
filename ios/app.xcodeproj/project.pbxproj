@@ -687,20 +687,21 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: kaoru fukushima (9E8ABHKSY3)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: kaoru fukushima (9E8ABHKSY3)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2.1.1;
 				DEVELOPMENT_TEAM = 9E8ABHKSY3;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = app/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 2.1.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.otok.banggos.development;
+				PRODUCT_BUNDLE_IDENTIFIER = com.otok.banggos;
 				PRODUCT_NAME = app;
-				PROVISIONING_PROFILE_SPECIFIER = BanggosAdHoc;
+				PROVISIONING_PROFILE_SPECIFIER = BanggosDistribution;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -716,19 +717,21 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: kaoru fukushima (9E8ABHKSY3)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: kaoru fukushima (9E8ABHKSY3)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2.1.1;
 				DEVELOPMENT_TEAM = 9E8ABHKSY3;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = app/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 2.1.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.otok.banggos.development;
+				PRODUCT_BUNDLE_IDENTIFIER = com.otok.banggos;
 				PRODUCT_NAME = app;
-				PROVISIONING_PROFILE_SPECIFIER = BanggosAdHoc;
+				PROVISIONING_PROFILE_SPECIFIER = BanggosDistribution;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -878,6 +881,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 9E8ABHKSY3;
+				ENABLE_BITCODE = NO;
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -944,6 +948,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = YES;
 				DEVELOPMENT_TEAM = 9E8ABHKSY3;
+				ENABLE_BITCODE = NO;
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
